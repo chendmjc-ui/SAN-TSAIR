@@ -1,0 +1,1 @@
+# Disable Jekyll build for GitHub Pages to bypass liquid syntax errors in n8n documentation.

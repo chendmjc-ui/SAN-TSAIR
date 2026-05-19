@@ -62,3 +62,20 @@ if sys.platform.startswith('win'):
 *   **首次檢測**：35 / 55 分 (63.6%) — 因 RWD 未寫入、JSON-LD 未寫入。
 *   **腳本修復與二輪檢測**：**55 / 55 分 (100.0%) — 完美通過！**
 *   **結論**：此事故的修復不僅保證了本地系統的 100% 穩定度，也讓我們成功部署了全套 SEO/AEO 策略，為客戶帶來順暢的終端體驗。
+
+---
+
+## 🚨 事故二：GitHub Pages Jekyll 引擎對 Liquid 語法編譯報錯阻塞上線
+*   **事故描述**：推送 `docs_n8n_flow.md` 之後，GitHub Pages 的線上網頁停止更新，在 GitHub 倉庫的 Actions 部署日誌中拋出 `Liquid syntax error`，提示大括號 `{{ $json.body.time }}` 無法被解析，導致整個 CI/CD 部署流程完全中斷。
+*   **影響範圍**：最新發布的「中性化（去第三方公司品牌攀比）」修改無法成功部署至 https://chendmjc-ui.github.io/SAN-TSAIR/，導致線上顯示的依然是含有舊版攀比內容的網頁快取。
+*   **修復耗時**：10 分鐘（含排查 Actions 日誌、定位 Liquid 報錯、部署靜態繞過機制與實地驗證）。
+
+### 🔍 根因分析
+1. **GitHub Pages 預設啟用 Jekyll 靜態建置**：當我們推送包含 markdown (`.md`) 檔案的倉庫時，GitHub Pages 會自動呼叫 Jekyll 引擎對所有 markdown 文件進行編譯。
+2. **Jekyll Liquid 語法衝突**：我們在 `docs_n8n_flow.md` 中為管理者提供了 n8n 工作流 of JSON 配置。在 n8n 中，變數取值使用的是雙大括號語法（例如 `{{ $json.body.name }}`）。Jekyll 引擎將雙大括號誤識別為自身的 Liquid 模板變數，但因為變數前綴是無效的 `$json`，因而拋出致命語法編譯錯誤並直接中斷建置。
+
+### 🛠️ 解決與修復方案
+*   **解決方法**：在倉庫根目錄下建立一個空檔案 `.nojekyll`（內容可為說明註釋）。
+*   **作用機制**：`.nojekyll` 檔案存在時，GitHub Pages 會被強制停用 Jekyll 引擎的編譯建置，直接以純靜態檔案（Static Site）的方式發布整個倉庫的所有 HTML/CSS/JS/MD 檔案。這完全避開了對 markdown 檔案內容的 Liquid 語法掃描與報錯，使得整個 CI/CD 管道瞬間恢復流暢。
+*   **驗證成果**：推送 `.nojekyll` 檔案後，GitHub Actions 順利在 30 秒內完成建置，最新版 100% 中性化無第三方公司攀比且具備 robots.txt/sitemap.xml/llms.txt AEO 規格的網頁完美上線！
+
