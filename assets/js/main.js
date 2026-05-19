@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const grid = document.getElementById('catalogGrid');
     const catalogs = {
       'weiwi': {
-        name: '瑋瑋服飾',
+        name: '經典商務生活服飾系列',
         items: [
           { name: '女裝制服套組', cat: '企業制服', img: '👗', desc: '版型修身，適合服務業、接待人員' },
           { name: '男裝制服套組', cat: '企業制服', img: '👔', desc: '挺版設計，中高階主管形象服' },
@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ]
       },
       'goorik': {
-        name: '富雷克 GOORIK',
+        name: '高機能運動防護服系列',
         items: [
           { name: '高機能POLO', cat: '機能服', img: '🎽', desc: '抗UV涼感吸排汗三合一' },
           { name: '科技廠制服', cat: '科技業', img: '🔬', desc: '防靜電材質，符合潔淨室規範' },

@@ -1,0 +1,24 @@
+# robots.txt for San-Tsair AEO/SEO Optimization
+User-agent: *
+Allow: /
+
+# Specific rules for AI Bots to ensure high visibility in AI search (AEO)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: SearchGPTBot
+Allow: /
+
+Sitemap: https://chendmjc-ui.github.io/SAN-TSAIR/sitemap.xml

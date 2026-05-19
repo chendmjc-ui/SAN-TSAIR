@@ -1,0 +1,288 @@
+{
+  "time": "2026-05-19T11:52:34.023254",
+  "score": 55,
+  "max_score": 55,
+  "percent": 100.0,
+  "checks": [
+    {
+      "name": "有 <title> 標籤",
+      "passed": true,
+      "weight": 2,
+      "tip": "",
+      "status": "✅"
+    },
+    {
+      "name": "Title 含關鍵字「彰化」",
+      "passed": true,
+      "weight": 2,
+      "tip": "在 <title> 加入「彰化」地域關鍵字",
+      "status": "✅"
+    },
+    {
+      "name": "有 meta description",
+      "passed": true,
+      "weight": 2,
+      "tip": "",
+      "status": "✅"
+    },
+    {
+      "name": "Meta description 含「彰化」",
+      "passed": true,
+      "weight": 1,
+      "tip": "",
+      "status": "✅"
+    },
+    {
+      "name": "有 OG:title",
+      "passed": true,
+      "weight": 1,
+      "tip": "",
+      "status": "✅"
+    },
+    {
+      "name": "有 OG:description",
+      "passed": true,
+      "weight": 1,
+      "tip": "",
+      "status": "✅"
+    },
+    {
+      "name": "有 OG:type",
+      "passed": true,
+      "weight": 1,
+      "tip": "",
+      "status": "✅"
+    },
+    {
+      "name": "語言設定 lang=zh-TW",
+      "passed": true,
+      "weight": 1,
+      "tip": "",
+      "status": "✅"
+    },
+    {
+      "name": "字元集 UTF-8",
+      "passed": true,
+      "weight": 1,
+      "tip": "",
+      "status": "✅"
+    },
+    {
+      "name": "viewport meta",
+      "passed": true,
+      "weight": 2,
+      "tip": "加入 <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">",
+      "status": "✅"
+    },
+    {
+      "name": "有 JSON-LD script",
+      "passed": true,
+      "weight": 3,
+      "tip": "加入 <script type=\"application/ld+json\"> LocalBusiness schema",
+      "status": "✅"
+    },
+    {
+      "name": "JSON-LD 含 @type LocalBusiness",
+      "passed": true,
+      "weight": 2,
+      "tip": "",
+      "status": "✅"
+    },
+    {
+      "name": "JSON-LD 含 address",
+      "passed": true,
+      "weight": 2,
+      "tip": "",
+      "status": "✅"
+    },
+    {
+      "name": "JSON-LD 含 openingHours",
+      "passed": true,
+      "weight": 1,
+      "tip": "",
+      "status": "✅"
+    },
+    {
+      "name": "JSON-LD 含 telephone",
+      "passed": true,
+      "weight": 1,
+      "tip": "",
+      "status": "✅"
+    },
+    {
+      "name": "JSON-LD 含 areaServed",
+      "passed": true,
+      "weight": 1,
+      "tip": "",
+      "status": "✅"
+    },
+    {
+      "name": "JSON-LD 含 hasOfferCatalog",
+      "passed": true,
+      "weight": 2,
+      "tip": "",
+      "status": "✅"
+    },
+    {
+      "name": "有 manifest.json 連結",
+      "passed": true,
+      "weight": 2,
+      "tip": "加入 <link rel=\"manifest\" href=\"manifest.json\">",
+      "status": "✅"
+    },
+    {
+      "name": "有 theme-color",
+      "passed": true,
+      "weight": 1,
+      "tip": "",
+      "status": "✅"
+    },
+    {
+      "name": "有 apple-mobile-web-app",
+      "passed": true,
+      "weight": 1,
+      "tip": "",
+      "status": "✅"
+    },
+    {
+      "name": "sw.js 存在",
+      "passed": true,
+      "weight": 2,
+      "tip": "建立 sw.js Service Worker",
+      "status": "✅"
+    },
+    {
+      "name": "manifest.json 存在",
+      "passed": true,
+      "weight": 2,
+      "tip": "",
+      "status": "✅"
+    },
+    {
+      "name": "有 <h1> 標籤",
+      "passed": true,
+      "weight": 2,
+      "tip": "頁面必須有且僅有一個 H1",
+      "status": "✅"
+    },
+    {
+      "name": "H1 只有一個",
+      "passed": true,
+      "weight": 2,
+      "tip": "頁面有多個 H1，需整合為一個",
+      "status": "✅"
+    },
+    {
+      "name": "有 <h2> 標籤",
+      "passed": true,
+      "weight": 1,
+      "tip": "",
+      "status": "✅"
+    },
+    {
+      "name": "有至少 6 個 <h3>",
+      "passed": true,
+      "weight": 1,
+      "tip": "",
+      "status": "✅"
+    },
+    {
+      "name": "關鍵字「匾額」出現",
+      "passed": true,
+      "weight": 1,
+      "tip": "",
+      "status": "✅"
+    },
+    {
+      "name": "關鍵字「彰化」出現 3+ 次",
+      "passed": true,
+      "weight": 1,
+      "tip": "",
+      "status": "✅"
+    },
+    {
+      "name": "關鍵字「制服」出現",
+      "passed": true,
+      "weight": 1,
+      "tip": "",
+      "status": "✅"
+    },
+    {
+      "name": "關鍵字「溪湖」出現",
+      "passed": true,
+      "weight": 1,
+      "tip": "",
+      "status": "✅"
+    },
+    {
+      "name": "30年品牌說明",
+      "passed": true,
+      "weight": 1,
+      "tip": "",
+      "status": "✅"
+    },
+    {
+      "name": "有 375px 媒體查詢",
+      "passed": true,
+      "weight": 2,
+      "tip": "加入 @media(max-width:375px) 超小螢幕樣式",
+      "status": "✅"
+    },
+    {
+      "name": "有 480px 媒體查詢",
+      "passed": true,
+      "weight": 1,
+      "tip": "",
+      "status": "✅"
+    },
+    {
+      "name": "有 768px 媒體查詢",
+      "passed": true,
+      "weight": 1,
+      "tip": "",
+      "status": "✅"
+    },
+    {
+      "name": "Hamburger 選單",
+      "passed": true,
+      "weight": 1,
+      "tip": "",
+      "status": "✅"
+    },
+    {
+      "name": "CSS 有 clamp()",
+      "passed": true,
+      "weight": 1,
+      "tip": "使用 clamp() 讓字型尺寸流動適應螢幕",
+      "status": "✅"
+    },
+    {
+      "name": "Google Fonts 預連線",
+      "passed": true,
+      "weight": 1,
+      "tip": "",
+      "status": "✅"
+    },
+    {
+      "name": "無內嵌 JavaScript",
+      "passed": true,
+      "weight": 1,
+      "tip": "",
+      "status": "✅"
+    },
+    {
+      "name": "外部 CSS 引用",
+      "passed": true,
+      "weight": 1,
+      "tip": "",
+      "status": "✅"
+    },
+    {
+      "name": "有 loading=lazy (img)",
+      "passed": true,
+      "weight": 1,
+      "tip": "",
+      "status": "✅"
+    }
+  ]
+}
