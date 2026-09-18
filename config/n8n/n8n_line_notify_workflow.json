@@ -1,0 +1,51 @@
+{
+  "name": "SAN-TSAIR Form to LINE Notify",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "contact",
+        "options": {}
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [ 250, 300 ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://notify-api.line.me/api/notify",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "message",
+              "value": "=\n【三才實業 詢價單】\n姓名: {{$json["body"]["name"]}}\n電話: {{$json["body"]["phone"]}}\n項目: {{$json["body"]["service"]}}\n數量: {{$json["body"]["qty"]}}\n說明: {{$json["body"]["msg"]}}\n時間: {{$json["body"]["time"]}}"
+            }
+          ]
+        }
+      },
+      "name": "LINE Notify",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [ 450, 300 ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "YOUR_LINE_NOTIFY_CREDENTIAL_ID",
+          "name": "Line Notify Auth"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [ { "node": "LINE Notify", "type": "main", "index": 0 } ]
+      ]
+    }
+  }
+}

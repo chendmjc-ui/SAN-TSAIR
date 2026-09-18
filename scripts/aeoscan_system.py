@@ -3,7 +3,7 @@
 """
 aeoscan_system.py — 三才實業 AEO/SEO 自動化檢測系統
 每次修改網站後執行，確認無失分項目
-用法：python aeoscan_system.py
+用法：於 repo 根目錄執行 python scripts/aeoscan_system.py
 """
 
 import os, re, json, datetime, sys
@@ -14,11 +14,11 @@ if sys.platform.startswith('win'):
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
     sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
-BASE = r'c:\Users\pc\projects\SAN-TSAIR'
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HTML_FILE = os.path.join(BASE, 'index.html')
 CSS_FILE  = os.path.join(BASE, 'assets', 'css', 'style.css')
 JS_FILE   = os.path.join(BASE, 'assets', 'js', 'main.js')
-REPORT_DIR = BASE
+REPORT_DIR = os.path.join(BASE, 'output', 'aeoscan_reports')
 
 CHECKS = []
 SCORE = 0
@@ -122,6 +122,7 @@ def run():
         'percent': round(pct, 1),
         'checks': CHECKS
     }
+    os.makedirs(REPORT_DIR, exist_ok=True)
     report_path = os.path.join(REPORT_DIR, f"aeoscan_report_{datetime.datetime.now().strftime('%Y%m%d_%H%M')}.json")
     with open(report_path, 'w', encoding='utf-8') as f:
         json.dump(report, f, ensure_ascii=False, indent=2)

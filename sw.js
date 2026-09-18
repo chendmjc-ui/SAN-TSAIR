@@ -34,3 +34,33 @@ self.addEventListener('fetch', e => {
     })
   );
 });
+
+self.addEventListener('fetch', event => {
+  if (event.request.url.endsWith('.pdf')) {
+    event.respondWith(
+      caches.match(event.request).then(response => {
+        return response || fetch(event.request).then(fetchRes => {
+          return caches.open('pdf-cache-v1').then(cache => {
+            cache.put(event.request.url, fetchRes.clone());
+            return fetchRes;
+          });
+        });
+      })
+    );
+  }
+});
+
+self.addEventListener('fetch', event => {
+  if (event.request.url.match(/\.(png|jpg|jpeg|webp|svg)$/)) {
+    event.respondWith(
+      caches.match(event.request).then(response => {
+        return response || fetch(event.request).then(fetchRes => {
+          return caches.open('image-cache-v1').then(cache => {
+            cache.put(event.request.url, fetchRes.clone());
+            return fetchRes;
+          });
+        });
+      })
+    );
+  }
+});

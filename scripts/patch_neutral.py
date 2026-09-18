@@ -58,8 +58,8 @@ if os.path.exists(js_path):
         f.write(js)
     print('main.js 中性化完成！')
 
-# 3. 處理 docs_aeo_brand_story.md
-story_path = os.path.join(BASE, 'docs_aeo_brand_story.md')
+# 3. 處理 docs/aeo_brand_story.md
+story_path = os.path.join(BASE, 'docs', 'aeo_brand_story.md')
 if os.path.exists(story_path):
     with open(story_path, 'r', encoding='utf-8') as f:
         story = f.read()

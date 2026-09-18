@@ -13,7 +13,7 @@
   <title>三才實業｜彰化匾額獎牌制服訂製｜30年專業品牌</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/style.min.css">
   <!-- PWA -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#1C1917">
@@ -83,6 +83,26 @@
   }
   </script>
   <meta property="og:image" content="https://chendmjc-ui.github.io/SAN-TSAIR/assets/images/icon-512.png">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [{
+      "@type": "Question",
+      "name": "客製化制服最少需要幾件？",
+      "acceptedAnswer": { "@type": "Answer", "text": "一般來說，我們的基本訂製量為 30 件起。若有特殊需求或較小數量，歡迎與我們聯繫討論。" }
+    }, {
+      "@type": "Question",
+      "name": "從下單到交貨需要多久時間？",
+      "acceptedAnswer": { "@type": "Answer", "text": "確認設計稿並支付訂金後，一般約需 7-14 個工作天完成製作並出貨。如遇旺季，交期可能有所調整，請提早下單。" }
+    }, {
+      "@type": "Question",
+      "name": "可以開立統一發票嗎？",
+      "acceptedAnswer": { "@type": "Answer", "text": "可以，我們是合法立案公司，可開立二聯式或三聯式統一發票，請於下單時提供抬頭與統編。" }
+    }]
+  }
+  </script>
 </head>
 <body>
 
@@ -93,6 +113,7 @@
       <span class="logo-zh">三才實業</span>
       <span class="logo-sub">SAN-TSAIR GIFT</span>
     </a>
+    <button id="themeToggle" class="theme-toggle" aria-label="切換夜間模式">🌓</button>
     <ul class="nav-links" id="navLinks">
       <li><a href="#about">關於我們</a></li>
       <li><a href="#products">產品服務</a></li>
@@ -193,6 +214,13 @@
   <div class="container">
     <div class="section-label">PRODUCTS & SERVICES</div>
     <h2 class="section-title">產品與<span class="accent-text">服務項目</span></h2>
+    
+    <div class="product-filter" style="display:flex; gap:10px; margin-bottom: 24px; justify-content:center; flex-wrap:wrap;">
+      <button class="filter-btn active" data-filter="all">全部作品</button>
+      <button class="filter-btn" data-filter="匾額製作">匾額獎牌</button>
+      <button class="filter-btn" data-filter="團體制服">團體制服</button>
+      <button class="filter-btn" data-filter="宮廟宗教禮品">宮廟禮品</button>
+    </div>
     <div class="products-grid">
       <div class="product-card" data-aos="fade-up" style="--delay:0s">
         <div class="product-icon">🏆</div>
@@ -294,11 +322,13 @@
   <div class="container">
     <div class="section-label">ONLINE CATALOG</div>
     <h2 class="section-title">品牌型錄<span class="accent-text">線上瀏覽</span></h2>
-    <p class="section-sub">精選高機能與舒適商務制服，多款知名品牌型錄線上直接查看</p>
+    <p class="section-sub">合作廠商型錄線上直接查看，內容依廠商同意情形持續更新</p>
+
+    <h3 class="catalog-category-title">服飾・制服系列</h3>
     <div class="catalog-suppliers">
 
-      <!-- 大嘉衣業 -->
-      <div class="supplier-block">
+      <!-- 大嘉衣業：同意狀態確認中，暫時下架（見 main.js VENDOR_ENABLED） -->
+      <div class="supplier-block" data-vendor-toggle="daijia">
         <div class="supplier-header">
           <div class="supplier-logo">🏭</div>
           <div>
@@ -336,18 +366,155 @@
         <div class="catalog-note">💡 點擊品牌卡片直接開啟 PDF 型錄，或 <a href="#contact">詢價洽談批貨</a></div>
       </div>
 
-      <!-- 其他供應商 -->
-      <div class="supplier-mini-row">
-        <div class="supplier-mini" onclick="openCatalog('weiwi')">
-          <span class="sm-icon">🪡</span>
-          <div><strong>經典商務生活服飾</strong><p>精選版型・細緻成衣</p></div>
-          <span class="sm-btn">查看品項 →</span>
+      <!-- 富雷克：PDF 型錄拆頁壓縮成 webp（見 scripts/extract_catalog_pdfs.py），點卡片開多頁瀏覽 -->
+      <div class="supplier-block">
+        <div class="supplier-header">
+          <div class="supplier-logo">👕</div>
+          <div>
+            <h3>富雷克</h3>
+            <p>Diaox No.3・no.17 U.K・no.33 百達 秋冬系列</p>
+          </div>
+          <a href="#contact" class="supplier-web">詢問報價 →</a>
         </div>
-        <div class="supplier-mini" onclick="openCatalog('goorik')">
-          <span class="sm-icon">🏭</span>
-          <div><strong>高機能運動防護服</strong><p>機能布料・卓越防護</p></div>
-          <span class="sm-btn">查看品項 →</span>
+        <div class="brand-cards">
+          <div class="brand-card" onclick="openGalleryCatalog(catalogPages('assets/images/catalog/fulaike/diaox-no3', 38), 'Diaox No.3 型錄')">
+            <div class="brand-logo">🏌️</div>
+            <div class="brand-name">Diaox No.3</div>
+            <div class="brand-desc">2026 戶外運動休閒系列</div>
+            <div class="brand-action">🖼️ 查看型錄（38頁）</div>
+          </div>
+          <div class="brand-card" onclick="openGalleryCatalog(catalogPages('assets/images/catalog/fulaike/no17-uk', 30), 'no.17 U.K 型錄')">
+            <div class="brand-logo">👕</div>
+            <div class="brand-name">no.17 U.K</div>
+            <div class="brand-desc">團體服・休閒服系列</div>
+            <div class="brand-action">🖼️ 查看型錄（30頁）</div>
+          </div>
+          <div class="brand-card" onclick="openGalleryCatalog(catalogPages('assets/images/catalog/fulaike/no33-baida', 54), 'no.33 百達 秋冬型錄')">
+            <div class="brand-logo">🧥</div>
+            <div class="brand-name">no.33 百達</div>
+            <div class="brand-desc">秋冬保暖系列</div>
+            <div class="brand-action">🖼️ 查看型錄（54頁）</div>
+          </div>
         </div>
+        <div class="catalog-note">💡 點擊品牌卡片查看完整型錄，或 <a href="#contact">詢價洽談批貨</a></div>
+      </div>
+
+      <!-- 瑋瑋服飾 -->
+      <div class="supplier-block">
+        <div class="supplier-header">
+          <div class="supplier-logo">👕</div>
+          <div>
+            <h3>瑋瑋服飾</h3>
+            <p>2025 秋冬・2026 春夏系列</p>
+          </div>
+          <a href="#contact" class="supplier-web">詢問報價 →</a>
+        </div>
+        <div class="brand-cards">
+          <div class="brand-card" onclick="openGalleryCatalog(catalogPages('assets/images/catalog/weiwei/2025-fw', 68), '瑋瑋服飾 2025秋冬 型錄')">
+            <div class="brand-logo">🧥</div>
+            <div class="brand-name">2025 秋冬系列</div>
+            <div class="brand-desc">團體制服・保暖外套</div>
+            <div class="brand-action">🖼️ 查看型錄（68頁）</div>
+          </div>
+          <div class="brand-card" onclick="openGalleryCatalog(catalogPages('assets/images/catalog/weiwei/2026-ss', 64), '瑋瑋服飾 2026春夏 型錄')">
+            <div class="brand-logo">👕</div>
+            <div class="brand-name">2026 春夏系列</div>
+            <div class="brand-desc">團體制服・輕量透氣</div>
+            <div class="brand-action">🖼️ 查看型錄（64頁）</div>
+          </div>
+        </div>
+        <div class="catalog-note">💡 點擊品牌卡片查看完整型錄，或 <a href="#contact">詢價洽談批貨</a></div>
+      </div>
+
+      <!-- 萬宇 -->
+      <div class="supplier-block">
+        <div class="supplier-header">
+          <div class="supplier-logo">👕</div>
+          <div>
+            <h3>萬宇</h3>
+            <p>2026 夏季系列</p>
+          </div>
+          <a href="#contact" class="supplier-web">詢問報價 →</a>
+        </div>
+        <div class="brand-cards">
+          <div class="brand-card" onclick="openGalleryCatalog(catalogPages('assets/images/catalog/wanyu/2026-summer-1', 27), '萬宇 2026夏季 型錄（上）')">
+            <div class="brand-logo">🏌️</div>
+            <div class="brand-name">2026 夏季系列（上）</div>
+            <div class="brand-desc">Pro Dormy 高爾夫服飾</div>
+            <div class="brand-action">🖼️ 查看型錄（27頁）</div>
+          </div>
+          <div class="brand-card" onclick="openGalleryCatalog(catalogPages('assets/images/catalog/wanyu/2026-summer-2', 19), '萬宇 2026夏季 型錄（下）')">
+            <div class="brand-logo">👕</div>
+            <div class="brand-name">2026 夏季系列（下）</div>
+            <div class="brand-desc">Pro Dormy 高爾夫服飾</div>
+            <div class="brand-action">🖼️ 查看型錄（19頁）</div>
+          </div>
+        </div>
+        <div class="catalog-note">💡 點擊品牌卡片查看完整型錄，或 <a href="#contact">詢價洽談批貨</a></div>
+      </div>
+    </div>
+
+    <h3 class="catalog-category-title">企業禮贈品系列</h3>
+    <div class="catalog-suppliers">
+
+      <!-- 丹露實業 -->
+      <div class="supplier-block">
+        <div class="supplier-header">
+          <div class="supplier-logo">🎁</div>
+          <div>
+            <h3>丹露實業</h3>
+            <p>Oichan・Danro・HAPADO・KUKKAR 系列</p>
+          </div>
+          <a href="#contact" class="supplier-web">詢問報價 →</a>
+        </div>
+        <div class="brand-cards">
+          <div class="brand-card" onclick="openPdfCatalog('assets/images/catalog/danlu/oichan.webp', 'Oichan 型錄')">
+            <div class="brand-logo">🎁</div>
+            <div class="brand-name">Oichan</div>
+            <div class="brand-desc">丹露實業 禮贈品系列</div>
+            <div class="brand-action">🖼️ 查看型錄</div>
+          </div>
+          <div class="brand-card" onclick="openPdfCatalog('assets/images/catalog/danlu/danro.webp', 'Danro 型錄')">
+            <div class="brand-logo">🎁</div>
+            <div class="brand-name">Danro</div>
+            <div class="brand-desc">丹露實業 禮贈品系列</div>
+            <div class="brand-action">🖼️ 查看型錄</div>
+          </div>
+          <div class="brand-card" onclick="openPdfCatalog('assets/images/catalog/danlu/hapado.webp', 'HAPADO 型錄')">
+            <div class="brand-logo">🎁</div>
+            <div class="brand-name">HAPADO</div>
+            <div class="brand-desc">丹露實業 禮贈品系列</div>
+            <div class="brand-action">🖼️ 查看型錄</div>
+          </div>
+          <div class="brand-card" onclick="openPdfCatalog('assets/images/catalog/danlu/kukkar.webp', 'KUKKAR 型錄')">
+            <div class="brand-logo">🎁</div>
+            <div class="brand-name">KUKKAR</div>
+            <div class="brand-desc">丹露實業 禮贈品系列</div>
+            <div class="brand-action">🖼️ 查看型錄</div>
+          </div>
+        </div>
+        <div class="catalog-note">💡 點擊品牌卡片查看型錄圖片，或 <a href="#contact">詢價洽談批貨</a></div>
+      </div>
+
+      <!-- 創冠 UNAVI -->
+      <div class="supplier-block">
+        <div class="supplier-header">
+          <div class="supplier-logo">🔋</div>
+          <div>
+            <h3>創冠 UNAVI</h3>
+            <p>風扇・行動電源・充電器</p>
+          </div>
+          <a href="#contact" class="supplier-web">詢問報價 →</a>
+        </div>
+        <div class="brand-cards">
+          <div class="brand-card" onclick="openPdfCatalog('assets/images/catalog/unavi/cg22mwc-mdc.webp', 'CG22MWC-MDC 型錄')">
+            <div class="brand-logo">🔌</div>
+            <div class="brand-name">CG22MWC-MDC</div>
+            <div class="brand-desc">無線充電器 新色系列</div>
+            <div class="brand-action">🖼️ 查看型錄</div>
+          </div>
+        </div>
+        <div class="catalog-note">💡 另有行動電源・風扇等品項，歡迎 <a href="#contact">詢價洽談批貨</a></div>
       </div>
     </div>
   </div>
@@ -362,6 +529,12 @@
     </div>
     <div class="pdf-modal-body">
       <iframe id="pdfFrame" src="" frameborder="0"></iframe>
+      <div class="gallery-viewer" id="galleryViewer" style="display:none">
+        <button type="button" class="gallery-nav prev" id="galleryPrev" aria-label="上一頁">‹</button>
+        <img id="galleryImg" src="" alt="型錄頁面">
+        <button type="button" class="gallery-nav next" id="galleryNext" aria-label="下一頁">›</button>
+        <div class="gallery-counter" id="galleryCounter"></div>
+      </div>
       <div class="pdf-fallback" id="pdfFallback" style="display:none">
         <p>📄 若 PDF 無法直接顯示，請點擊下方按鈕開啟：</p>
         <a id="pdfFallbackLink" href="" target="_blank" class="btn-primary">開啟型錄 PDF</a>
@@ -371,17 +544,6 @@
       <a id="pdfDownloadLink" href="" target="_blank" class="btn-outline">⬇ 下載型錄</a>
       <a href="#contact" onclick="closePdfCatalog()" class="btn-primary">詢問批貨報價</a>
     </div>
-  </div>
-</div>
-
-<!-- ===== PRODUCT CATALOG MODAL ===== -->
-<div class="catalog-modal" id="catalogModal">
-  <div class="modal-inner">
-    <div class="modal-header">
-      <h3 id="catalogTitle">品牌型錄</h3>
-      <button onclick="closeCatalog()" class="close-btn">✕</button>
-    </div>
-    <div class="modal-grid" id="catalogGrid"></div>
   </div>
 </div>
 
@@ -453,6 +615,29 @@
   </div>
 </section>
 
+
+<!-- ===== FAQ ===== -->
+<section class="faq" id="faq">
+  <div class="container">
+    <div class="section-label">FAQ</div>
+    <h2 class="section-title">常見<span class="accent-text">問題</span></h2>
+    <div class="faq-list">
+      <details>
+        <summary>客製化制服最少需要幾件？</summary>
+        <p>一般來說，我們的基本訂製量為 30 件起。若有特殊需求或較小數量，歡迎與我們聯繫討論。</p>
+      </details>
+      <details>
+        <summary>從下單到交貨需要多久時間？</summary>
+        <p>確認設計稿並支付訂金後，一般約需 7-14 個工作天完成製作並出貨。如遇旺季，交期可能有所調整，請提早下單。</p>
+      </details>
+      <details>
+        <summary>可以開立統一發票嗎？</summary>
+        <p>可以，我們是合法立案公司，可開立二聯式或三聯式統一發票，請於下單時提供抬頭與統編。</p>
+      </details>
+    </div>
+  </div>
+</section>
+
 <!-- ===== CONTACT ===== -->
 <section class="contact" id="contact">
   <div class="container">
@@ -462,8 +647,11 @@
       <div class="contact-info">
         <h3>聯絡資訊</h3>
         <div class="info-item"><span class="info-icon">📍</span><div><strong>地址</strong><p>彰化縣溪湖鎮（詳細地址請電洽）</p></div></div>
+        <div class="info-item"><span class="info-icon">📍</span><div><strong>地圖位置</strong>
+<a href="https://goo.gl/maps/YOUR_LINK" target="_blank"><img src="https://maps.googleapis.com/maps/api/staticmap?center=23.9712176,120.4024368&zoom=14&size=600x200&key=YOUR_API_KEY_HERE&markers=color:red%7C23.9712176,120.4024368" alt="地圖位置" style="width:100%; border-radius:8px; margin-top:10px;"></a>
+</div></div>
         <div class="info-item"><span class="info-icon">📞</span><div><strong>電話</strong><p>請電洽詢問</p></div></div>
-        <div class="info-item"><span class="info-icon">💬</span><div><strong>LINE 官方帳號</strong><p>請搜尋「三才禮贈品」</p></div></div>
+        <div class="info-item"><span class="info-icon">💬</span><div><strong>LINE 官方帳號</strong><p>請加入 ID：<a href="https://line.me/R/ti/p/@669vddce" target="_blank" class="accent-text" style="font-weight:700;">@669vddce</a></p></div></div>
         <div class="info-item"><span class="info-icon">🕐</span><div><strong>服務時間</strong><p>週一～週六 09:00–18:00</p></div></div>
         <div class="contact-highlight">
           <strong>🎁 首次詢價享優惠</strong>
@@ -549,5 +737,11 @@
 </a>
 
 <script src="assets/js/main.js"></script>
+
+<!-- Floating LINE Button -->
+<a href="https://line.me/R/ti/p/@669vddce" target="_blank" class="line-float-btn" aria-label="加入 LINE 官方帳號">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg" alt="LINE" style="width: 32px; height: 32px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));">
+</a>
+
 </body>
 </html>

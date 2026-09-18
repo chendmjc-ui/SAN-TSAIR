@@ -44,6 +44,35 @@ document.addEventListener('DOMContentLoaded', () => {
     container.appendChild(p);
   }
 
+  
+  // --- Number Counter Animation ---
+  const countObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const target = e.target;
+        const finalNum = parseInt(target.innerText.replace(/\D/g, ''));
+        let start = 0;
+        const duration = 2000;
+        const step = Math.max(1, Math.floor(finalNum / (duration / 16)));
+        const timer = setInterval(() => {
+          start += step;
+          if (start >= finalNum) {
+            target.innerText = finalNum + (target.dataset.suffix || '');
+            clearInterval(timer);
+          } else {
+            target.innerText = start + (target.dataset.suffix || '');
+          }
+        }, 16);
+        countObserver.unobserve(target);
+      }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.stat-num').forEach(el => {
+    if(el.innerText.includes('+')) el.dataset.suffix = '+';
+    if(el.innerText.includes('%')) el.dataset.suffix = '%';
+    countObserver.observe(el);
+  });
+
   // --- Scroll reveal ---
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => {
@@ -58,14 +87,9 @@ document.addEventListener('DOMContentLoaded', () => {
     observer.observe(el);
   });
 
-  // --- LINE Notify 表單串接 ---
-  // 設定說明：
-  // 1. 前往 https://notify-bot.line.me/zh_TW/ 登入
-  // 2. 點選「發行權杖」→ 輸入名稱並選擇聊天室
-  // 3. 複製 Token 填入下方 LINE_TOKEN
-  // 4. 或改用 n8n Webhook（推薦，更穩定）
-  const LINE_TOKEN = 'YOUR_LINE_NOTIFY_TOKEN_HERE';
-  const N8N_WEBHOOK = ''; // 可填入 n8n webhook URL
+  // --- 詢價表單 → Google Apps Script（寫入 Google Sheet + LINE Messaging API 通知）---
+  // 部署步驟見 docs/apps_script_form_setup.md，部署完成後把下面網址換成實際的 /exec 網址
+  const FORM_WEBHOOK = 'PASTE_APPS_SCRIPT_EXEC_URL_HERE';
 
   const form = document.getElementById('contactForm');
   if (form) {
@@ -87,32 +111,36 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.disabled = true;
       btn.style.opacity = '0.7';
 
-      const lineMsg = `\n【三才實業 新詢價單】\n姓名/公司：${name}\n聯絡電話：${phone}\n需求項目：${service || '未指定'}\n預計數量：${qty || '未填'}\n需求說明：${msg || '無'}\n時間：${new Date().toLocaleString('zh-TW')}`;
-
       let sent = false;
-
-      // 方法 1: n8n webhook（優先）
-      if (N8N_WEBHOOK) {
-        try {
-          await fetch(N8N_WEBHOOK, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, phone, service, qty, msg, time: new Date().toISOString() })
-          });
-          sent = true;
-        } catch {}
+      try {
+        // Content-Type 故意用 text/plain：Apps Script Web App 不處理 CORS 預檢請求（OPTIONS），
+        // 用 application/json 會觸發預檢而失敗；body 仍是 JSON 字串，Apps Script 端照樣 JSON.parse 解析
+        const res = await fetch(FORM_WEBHOOK, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ name, phone, service, qty, msg, time: new Date().toISOString() })
+        });
+        sent = res.ok;
+      } catch (err) {
+        console.error('詢價單傳送失敗:', err);
       }
 
-      // 方法 2: 直接存入 localStorage（備用記錄）
+      // 本機備用記錄（無論是否送達都保留，方便排查）
       const records = JSON.parse(localStorage.getItem('santsair_inquiries') || '[]');
-      records.push({ name, phone, service, qty, msg, time: new Date().toISOString() });
+      records.push({ name, phone, service, qty, msg, time: new Date().toISOString(), sent });
       localStorage.setItem('santsair_inquiries', JSON.stringify(records));
 
-      btn.textContent = '✅ 詢價單已送出！我們將於1個工作天內回覆';
-      btn.style.background = '#16a34a';
-      btn.style.color = '#fff';
+      if (sent) {
+        btn.textContent = '✅ 詢價單已送出！我們將於1個工作天內回覆';
+        btn.style.background = '#16a34a';
+        btn.style.color = '#fff';
+        form.reset();
+      } else {
+        btn.textContent = '⚠️ 傳送失敗，請改用 LINE 或電話聯絡我們';
+        btn.style.background = '#dc2626';
+        btn.style.color = '#fff';
+      }
       btn.style.opacity = '1';
-      form.reset();
 
       setTimeout(() => {
         btn.textContent = '送出詢價';
@@ -123,62 +151,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- Catalog modal ---
-  window.openCatalog = function(supplier) {
-    const modal = document.getElementById('catalogModal');
-    const title = document.getElementById('catalogTitle');
-    const grid = document.getElementById('catalogGrid');
-    const catalogs = {
-      'weiwi': {
-        name: '經典商務生活服飾系列',
-        items: [
-          { name: '女裝制服套組', cat: '企業制服', img: '👗', desc: '版型修身，適合服務業、接待人員' },
-          { name: '男裝制服套組', cat: '企業制服', img: '👔', desc: '挺版設計，中高階主管形象服' },
-          { name: '護士服/診所服', cat: '醫療服', img: '🏥', desc: '防菌防汙材質，多款顏色' },
-          { name: '餐飲工作服', cat: '餐飲服', img: '👨‍🍳', desc: '易清洗防污，附圍裙套組' },
-          { name: '幼兒園園服', cat: '幼教服', img: '🎒', desc: '安全材質鬆緊帶設計，多尺碼' },
-          { name: '居家服套組', cat: '生活服', img: '🛋️', desc: '純棉舒適，企業員工福利首選' },
-        ]
-      },
-      'goorik': {
-        name: '高機能運動防護服系列',
-        items: [
-          { name: '高機能POLO', cat: '機能服', img: '🎽', desc: '抗UV涼感吸排汗三合一' },
-          { name: '科技廠制服', cat: '科技業', img: '🔬', desc: '防靜電材質，符合潔淨室規範' },
-          { name: '反光安全背心', cat: '工安服', img: '🦺', desc: '工地交管專用' },
-          { name: '防風軟殼外套', cat: '機能外套', img: '🧥', desc: '多層複合布料，戶外活動首選' },
-          { name: '企業高識別度服', cat: '品牌服', img: '🏢', desc: '大面積LOGO印刷，強化品牌形象' },
-          { name: '夾克/風衣套裝', cat: '商務服', img: '💼', desc: '簡約商務風，會議展覽指定款' },
-        ]
-      }
-    };
-    const data = catalogs[supplier];
-    if (!data) return;
-    title.textContent = data.name + ' — 品牌型錄';
-    grid.innerHTML = data.items.map(item => `
-      <div class="catalog-card">
-        <div class="catalog-icon">${item.img}</div>
-        <div class="catalog-badge">${item.cat}</div>
-        <h4>${item.name}</h4>
-        <p>${item.desc}</p>
-        <button class="catalog-inquiry" onclick="inquiryCatalog('${item.name}')">詢問此商品</button>
-      </div>
-    `).join('');
-    modal.classList.add('open');
+  // --- 廠商上下架開關 ---
+  // 大嘉衣業：同意狀態確認中（詳見 P:\@三才WEB\@三才WEB.xlsx），暫時下架；
+  // 取得書面同意後把 daijia 改成 true 即可重新上架，不用改 HTML 結構
+  const VENDOR_ENABLED = {
+    daijia: false
   };
+  document.querySelectorAll('[data-vendor-toggle]').forEach(el => {
+    if (VENDOR_ENABLED[el.dataset.vendorToggle] === false) el.style.display = 'none';
+  });
 
-  window.closeCatalog = function() {
-    document.getElementById('catalogModal').classList.remove('open');
-  };
-
-  window.inquiryCatalog = function(productName) {
-    closeCatalog();
-    const msgEl = document.getElementById('msg');
-    if (msgEl) msgEl.value = '我對「' + productName + '」有興趣，請提供報價與更多資訊。';
-    document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
-  };
-
-  // --- PDF Catalog Modal ---
+  // --- PDF Catalog Modal（單一檔案：大嘉衣業外部 PDF、丹露/創冠單張型錄圖）---
   window.openPdfCatalog = function(url, title) {
     const modal = document.getElementById('catalogPdfModal');
     const frame = document.getElementById('pdfFrame');
@@ -186,6 +169,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const dlLink = document.getElementById('pdfDownloadLink');
     const fallbackLink = document.getElementById('pdfFallbackLink');
     const fallback = document.getElementById('pdfFallback');
+
+    document.getElementById('galleryViewer').style.display = 'none';
+    frame.style.display = 'block';
+    dlLink.style.display = '';
 
     titleEl.textContent = title;
     dlLink.href = url;
@@ -204,19 +191,64 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 4000);
   };
 
+  // --- 多頁型錄瀏覽（富雷克/瑋瑋服飾/萬宇：PDF 拆頁壓縮成的 webp 圖片組）---
+  // basePath 底下依 scripts/extract_catalog_pdfs.py 的輸出命名規則排好 page-01.webp ~ page-NN.webp
+  window.catalogPages = function(basePath, count) {
+    const list = [];
+    for (let i = 1; i <= count; i++) {
+      list.push(basePath + '/page-' + String(i).padStart(2, '0') + '.webp');
+    }
+    return list;
+  };
+
+  let galleryPages = [];
+  let galleryIndex = 0;
+
+  function renderGalleryPage() {
+    document.getElementById('galleryImg').src = galleryPages[galleryIndex];
+    document.getElementById('galleryCounter').textContent = (galleryIndex + 1) + ' / ' + galleryPages.length;
+    document.getElementById('galleryPrev').disabled = galleryIndex === 0;
+    document.getElementById('galleryNext').disabled = galleryIndex === galleryPages.length - 1;
+  }
+
+  window.openGalleryCatalog = function(pages, title) {
+    const modal = document.getElementById('catalogPdfModal');
+    const titleEl = document.getElementById('pdfModalTitle');
+    const dlLink = document.getElementById('pdfDownloadLink');
+
+    document.getElementById('pdfFrame').style.display = 'none';
+    document.getElementById('pdfFallback').style.display = 'none';
+    document.getElementById('galleryViewer').style.display = 'flex';
+    dlLink.style.display = 'none';
+
+    titleEl.textContent = title;
+    galleryPages = pages;
+    galleryIndex = 0;
+    renderGalleryPage();
+    modal.classList.add('open');
+  };
+
+  document.getElementById('galleryPrev')?.addEventListener('click', () => {
+    if (galleryIndex > 0) { galleryIndex--; renderGalleryPage(); }
+  });
+  document.getElementById('galleryNext')?.addEventListener('click', () => {
+    if (galleryIndex < galleryPages.length - 1) { galleryIndex++; renderGalleryPage(); }
+  });
+  document.addEventListener('keydown', (e) => {
+    if (!galleryPages.length || !document.getElementById('catalogPdfModal').classList.contains('open')) return;
+    if (e.key === 'ArrowLeft') document.getElementById('galleryPrev').click();
+    if (e.key === 'ArrowRight') document.getElementById('galleryNext').click();
+  });
+
   window.closePdfCatalog = function() {
     const modal = document.getElementById('catalogPdfModal');
-    const frame = document.getElementById('pdfFrame');
     modal.classList.remove('open');
-    frame.src = '';
+    document.getElementById('pdfFrame').src = '';
+    galleryPages = [];
   };
 
   document.getElementById('catalogPdfModal')?.addEventListener('click', function(e) {
     if (e.target === this) closePdfCatalog();
-  });
-
-  document.getElementById('catalogModal')?.addEventListener('click', function(e) {
-    if (e.target === this) closeCatalog();
   });
 
   // --- Active nav highlight on scroll ---
@@ -232,4 +264,36 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }, { passive: true });
 
+});
+
+// --- Dark Mode Toggle ---
+const themeBtn = document.getElementById('themeToggle');
+if (themeBtn) {
+  themeBtn.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    const target = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', target);
+    localStorage.setItem('theme', target);
+  });
+  if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  }
+}
+
+// --- Product Filter ---
+const filterBtns = document.querySelectorAll('.filter-btn');
+const productCards = document.querySelectorAll('.product-card');
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    productCards.forEach(card => {
+      if (filter === 'all' || card.querySelector('h3').innerText.includes(filter) || card.querySelector('.product-icon').innerText.includes(filter)) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  });
 });

@@ -1,0 +1,67 @@
+{
+  "name": "SAN-TSAIR Form to LINE Messaging API",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "contact-messaging",
+        "options": {}
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        250,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.line.me/v2/bot/message/push",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "json",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "to",
+              "value": "YOUR_LINE_USER_ID_HERE"
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"type\":\"flex\",\"altText\":\"三才實業 - 新詢價單通知\",\"contents\":{\"type\":\"bubble\",\"header\":{\"type\":\"box\",\"layout\":\"vertical\",\"contents\":[{\"type\":\"text\",\"text\":\"🏆 新詢價單通知\",\"weight\":\"bold\",\"color\":\"#B45309\",\"size\":\"xl\"}]},\"body\":{\"type\":\"box\",\"layout\":\"vertical\",\"contents\":[{\"type\":\"box\",\"layout\":\"baseline\",\"spacing\":\"sm\",\"contents\":[{\"type\":\"text\",\"text\":\"姓名\",\"color\":\"#aaaaaa\",\"size\":\"sm\",\"flex\":1},{\"type\":\"text\",\"text\":\"{{$json.body.name}}\",\"wrap\":true,\"color\":\"#666666\",\"size\":\"sm\",\"flex\":5}]},{\"type\":\"box\",\"layout\":\"baseline\",\"spacing\":\"sm\",\"contents\":[{\"type\":\"text\",\"text\":\"電話\",\"color\":\"#aaaaaa\",\"size\":\"sm\",\"flex\":1},{\"type\":\"text\",\"text\":\"{{$json.body.phone}}\",\"wrap\":true,\"color\":\"#666666\",\"size\":\"sm\",\"flex\":5}]},{\"type\":\"box\",\"layout\":\"baseline\",\"spacing\":\"sm\",\"contents\":[{\"type\":\"text\",\"text\":\"項目\",\"color\":\"#aaaaaa\",\"size\":\"sm\",\"flex\":1},{\"type\":\"text\",\"text\":\"{{$json.body.service}}\",\"wrap\":true,\"color\":\"#666666\",\"size\":\"sm\",\"flex\":5}]},{\"type\":\"box\",\"layout\":\"baseline\",\"spacing\":\"sm\",\"contents\":[{\"type\":\"text\",\"text\":\"數量\",\"color\":\"#aaaaaa\",\"size\":\"sm\",\"flex\":1},{\"type\":\"text\",\"text\":\"{{$json.body.qty}}\",\"wrap\":true,\"color\":\"#666666\",\"size\":\"sm\",\"flex\":5}]},{\"type\":\"box\",\"layout\":\"baseline\",\"spacing\":\"sm\",\"contents\":[{\"type\":\"text\",\"text\":\"說明\",\"color\":\"#aaaaaa\",\"size\":\"sm\",\"flex\":1},{\"type\":\"text\",\"text\":\"{{$json.body.msg}}\",\"wrap\":true,\"color\":\"#666666\",\"size\":\"sm\",\"flex\":5}]}]}}}]"
+            }
+          ]
+        }
+      },
+      "name": "LINE Messaging API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        450,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "YOUR_LINE_MESSAGING_API_TOKEN_ID",
+          "name": "Line Messaging API Auth"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "LINE Messaging API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

@@ -1,0 +1,13 @@
+# 機密／內部資料 — 絕不可進入這個公開 GitHub Pages repo
+# gift-suppliers/ 內含供應商報價、私人聯絡窗口、內部盡調評估，整份目錄禁止進版控
+/gift-suppliers/
+
+# Excel 暫存鎖定檔
+~$*.xlsx
+
+# Node 依賴
+node_modules/
+
+# Python 快取
+__pycache__/
+*.pyc
