@@ -153,9 +153,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- 廠商上下架開關 ---
   // 大嘉衣業：同意狀態確認中（詳見 P:\@三才WEB\@三才WEB.xlsx），暫時下架；
-  // 取得書面同意後把 daijia 改成 true 即可重新上架，不用改 HTML 結構
+  // Maktar：已同意但要先看三才網站再決定，先做好素材保持關閉；
+  // 取得書面同意後把對應開關改成 true 即可重新上架，不用改 HTML 結構
   const VENDOR_ENABLED = {
-    daijia: false
+    daijia: false,
+    maktar: false
   };
   document.querySelectorAll('[data-vendor-toggle]').forEach(el => {
     if (VENDOR_ENABLED[el.dataset.vendorToggle] === false) el.style.display = 'none';
