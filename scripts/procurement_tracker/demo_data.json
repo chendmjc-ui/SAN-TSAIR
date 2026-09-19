@@ -1,0 +1,69 @@
+{
+  "suppliers": {
+    "SUP-DEMO-1": {
+      "supplier_id": "SUP-DEMO-1",
+      "name": "示範廠商A",
+      "category": "gift",
+      "agreement_status": "unknown",
+      "tier": 1,
+      "created_at": "2026-09-20T01:03:50.288996"
+    },
+    "SUP-DEMO-2": {
+      "supplier_id": "SUP-DEMO-2",
+      "name": "示範廠商B",
+      "category": "uniform",
+      "agreement_status": "unknown",
+      "tier": 2,
+      "created_at": "2026-09-20T01:03:50.288996"
+    }
+  },
+  "quotes": {
+    "Q-DEMO-1": {
+      "quote_id": "Q-DEMO-1",
+      "supplier_id": "SUP-DEMO-1",
+      "product_name": "虛構禮品X",
+      "status": "ordered",
+      "reply_deadline": "2099-01-01",
+      "history": [
+        "inquired",
+        "quoted",
+        "sampling",
+        "deciding",
+        "ordered"
+      ]
+    },
+    "Q-DEMO-2": {
+      "quote_id": "Q-DEMO-2",
+      "supplier_id": "SUP-DEMO-2",
+      "product_name": "虛構制服Y",
+      "status": "rejected",
+      "reply_deadline": "2099-01-01",
+      "history": [
+        "inquired",
+        "quoted",
+        "rejected"
+      ]
+    },
+    "Q-DEMO-3": {
+      "quote_id": "Q-DEMO-3",
+      "supplier_id": "SUP-DEMO-1",
+      "product_name": "虛構禮品Z",
+      "status": "inquired",
+      "reply_deadline": "2099-01-01",
+      "history": [
+        "inquired"
+      ]
+    },
+    "Q-DEMO-4": {
+      "quote_id": "Q-DEMO-4",
+      "supplier_id": "SUP-DEMO-2",
+      "product_name": "虛構禮品逾期案例",
+      "status": "overdue",
+      "reply_deadline": "2026-09-17",
+      "history": [
+        "inquired",
+        "overdue"
+      ]
+    }
+  }
+}
