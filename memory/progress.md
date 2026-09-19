@@ -2,6 +2,13 @@
 
 > 每次任務開始時更新
 
+## 2026-09-19
+- 09-18 待辦 1-5 續辦：commit（40b724f）已完成、Maktar 已拍板「先做但關閉」並完成開發、光榮工藝社已問過 user 但資料夾確認全空需補素材
+- Maktar Playwright 驗證中途撞到 C 槽磁碟寫入失敗（ENOSPC），查出 C 槽 918G/931G 已用僅剩 13GB，緊急插入唯讀磁碟盤點（未刪除任何檔案，詳見 activeContext.md）
+- 查出 `$Recycle.Bin` 顯示的 48G 其實在 SYSTEM 帳戶底下需要系統管理員權限才能清，一般權限清不到
+- Downloads/AppData 大宗佔用細部排行已掃一半（AppData 子項掃描被 //save 中斷），C 槽清理清單尚未收斂完成
+- Maktar 型錄異動因 Playwright Step 2 未驗證完成，故意先不 commit
+
 ## 2026-09-18
 - 完成現有網站架構全面盤點（詳見 activeContext.md）
 - 詢價表單從 n8n webhook 改接 Google Apps Script（程式碼完成，部署待 user 操作）

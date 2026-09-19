@@ -2,6 +2,32 @@
 
 > 每次任務開始時更新
 
+## 2026-09-19 23:06 CST C 槽空間危機（唯讀分析中）+ Maktar 驗證卡住未 commit
+
+- **背景**：延續 09-18 的 1-5 待辦，繼續處理時 Maktar Playwright 驗證撞到磁碟寫入失敗，查出 C 槽已逼近滿載，中途插入緊急磁碟盤點，尚未收尾。
+- **C 槽危機**：918G/931G 已用（99%），僅剩 13GB。已完成唯讀掃描（**全程沒刪除任何檔案**）：
+  - `Documents and Settings` 顯示 685G 其實是指向 `C:\Users` 的系統相容性 junction，`du` 誤跟導致重複計算，非額外佔用，已排除誤判。
+  - `C:\Users\pc` 670G 為大宗：`projects/` 278G、`AppData/` 116G、`Videos/` 88G、`Downloads/` 79G、`Documents/` 75G、`Desktop/` 20G。
+  - `$Recycle.Bin` 顯示 48G，但使用者自己帳號（SID 尾碼 -1000）的回收筒只有 65KB，那 48G 其實在 **SYSTEM 帳戶**（S-1-5-18）底下，`Clear-RecycleBin` 與 COM Shell 方法都因目前 PowerShell session 非系統管理員身分而清不到，**這條路卡住，需要 user 用系統管理員身分手動處理**。
+  - `Downloads/` 79G 已細看：約 4GB 是重複安裝檔（NVMS Lite×2／pdfgear_setup×2／VSCodeUserSetup×2／DiscordSetup×2／印表機驅動程式資料夾+zip重複等），低風險可刪；`Video/`28G、`Compressed/`27G 需 user 自己看內容判斷；東茂易拉展海報.pdf、RT授課檔等業務文件不建議動。
+  - `AppData/` 116G 的 Local/Roaming 子資料夾細部排行掃描（背景任務 ID `btanc1eme`）啟動後被 `//save` 指令中斷，**結果尚未讀取**，下次接續先看該任務輸出檔（session 若已結束此暫存路徑可能失效，需要重新跑一次 `du`）。
+  - user 目前只拍板「先清空回收筒」，但因權限問題卡住；其餘項目（Downloads 低風險安裝檔、AppData 快取）都還沒問過 user 要不要刪。
+- **Maktar 型錄**：HTML/JS/webp 圖檔都已做完但**尚未 commit**（`git status` 顯示 `assets/js/main.js`／`index.html`／`temple-gifts.html` modified + `assets/images/catalog/maktar/`、`scripts/extract_maktar_catalog.py` 未追蹤）。`VENDOR_ENABLED.maktar = false`（關閉狀態）。Playwright **Step 1（預設隱藏）已通過**；**Step 2（開啟後 modal／翻頁／圖片載入）因磁碟空間不足中斷未完成**——main.js 已確認沒有殘留任何測試改動。**建議 C 槽空間問題緩解後重跑 Step 2，通過才 commit**，不要在驗證不完整的狀態下進版控。
+
+### 下次接續順序
+1. 重跑或讀取 AppData 掃描結果，彙整完整 C 槽清理清單給 user 逐項拍板（哪些刪、哪些留）
+2. C 槽空出足夠空間後，重跑 Maktar Playwright Step 2 驗證（開啟開關→點卡片→查 modal/頁碼/圖片載入→改回關閉）
+3. Step 2 通過後才 commit Maktar 型錄異動
+4. 光榮工藝社持續等 user 補素材（型錄/照片/報價單），資料夾目前完全是空的
+5. Google Apps Script 部署仍等 user 本人操作（見 `docs/apps_script_form_setup.md`）
+
+## 2026-09-18 17:10 CST 第一批 commit 完成 + Maktar 上架（關閉中）
+
+- **已 commit**（`40b724f`，未 push）：型錄架構重建全部異動一次性進版控，351 檔案，git status 已確認 config/ 與測試腳本內都只有佔位符沒有真實密鑰。
+- **待決事項 2（Maktar）已拍板**：user 選「先做但關閉（推薦）」。已從 `P:\@三才WEB\2-廠商要先看三才網頁才決定是否能使用資料\同意-但要先看三才網站\Maktar--Qubii Duo手機自動備份\` 取素材，寫 `scripts/extract_maktar_catalog.py` 拆頁（企業產品型錄19頁、Sales Kit 6頁）輸出到 `assets/images/catalog/maktar/`，`index.html`+`temple-gifts.html` 同步加上 Maktar supplier-block（`data-vendor-toggle="maktar"`），`main.js` `VENDOR_ENABLED.maktar = false`（比照大嘉衣業模式，取得書面同意後改 true 即可上架）。Playwright 驗證跑在背景（驗證開關隱藏/顯示+多頁瀏覽器功能），結果待補。**這批異動尚未 commit**。
+- **待決事項 4（光榮工藝社）已問過 user**：user 選「要上架的品牌型錄」，但實地查證 `P:\@三才WEB\@詢問廠商意見中\光榮工藝社\` 資料夾**完全是空的**（0 檔案），連一張圖片都沒有——沒辦法憑空生內容，**需 user 補素材**（型錄/照片/報價單等）才能繼續開發，本次先跳過不擋其他項目。
+- Maktar 報價單 PDF（`Maktar 報價單 三才實業有限公司.pdf`）確認**未採用**，遵守「網站嚴禁公開物件價格」規則。
+
 ## 2026-09-18 型錄架構重建（服飾已完成一段落，禮品部分待決）
 
 ### 已完成
