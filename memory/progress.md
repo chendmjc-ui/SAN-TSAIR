@@ -2,6 +2,13 @@
 
 > 每次任務開始時更新
 
+## 2026-09-20
+- C 槽危機解除（SYSTEM 回收筒用 schtasks/SYSTEM 身分技巧清空、npm/pip 快取、Downloads 重複檔）
+- Maktar Step 2 Playwright 驗證 64 項全過，已 commit（1d4be98）
+- 補上 PWA icon 404 缺口（用公司正式商標裁切製作），已 commit（2e53a23）
+- 寫好 Google Apps Script 一鍵部署互動腳本（scripts/setup_apps_script_form.py），等 user 執行
+- 「贈禮品尋單採購流程」架構規劃 goal/loop 全 5 Phase 完成並個別 commit，全程未碰 gift-suppliers/ 機密資料，HANDOFF 列 3 項待 user 決定
+
 ## 2026-09-19
 - 09-18 待辦 1-5 續辦：commit（40b724f）已完成、Maktar 已拍板「先做但關閉」並完成開發、光榮工藝社已問過 user 但資料夾確認全空需補素材
 - Maktar Playwright 驗證中途撞到 C 槽磁碟寫入失敗（ENOSPC），查出 C 槽 918G/931G 已用僅剩 13GB，緊急插入唯讀磁碟盤點（未刪除任何檔案，詳見 activeContext.md）

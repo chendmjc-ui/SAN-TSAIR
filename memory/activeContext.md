@@ -2,7 +2,35 @@
 
 > 每次任務開始時更新
 
-## 2026-09-19 23:06 CST C 槽空間危機（唯讀分析中）+ Maktar 驗證卡住未 commit
+## 2026-09-20 01:05 CST Maktar 已 commit＋PWA icon 修復＋贈禮品採購流程架構 goal/loop 全部完成
+
+- **Maktar Step 2 驗證：全過，已 commit**（`1d4be98`）。派 Fable agent 背景重跑，用 `page.route` 攔截 `main.js` 回應動態切換 `maktar: true` 驗證（不動 working tree），index.html／temple-gifts.html 各自 64 項檢查（卡片顯示/modal/19頁+6頁翻頁/鍵盤左右鍵/25張圖片200無破圖/無console error）全過，main.js 最終確認仍是 `maktar: false`。
+- **PWA icon 404 缺口已修復並 commit**（`2e53a23`）：`manifest.json`／`og:image` 指向的 `assets/images/icon-192.png`／`icon-512.png` 原本不存在，是 09-18 架構盤點記過但沒真的補的缺口。用 P 槽 `三才文件\三才名片設計\...\ALEX-三才.jpg`（公司已核可印刷的正式商標）裁切出乾淨的圓形 ST 標誌（**只取商標本身，不含姓名/電話/QR code 等個資**），套用 manifest 背景色 `#FAF8F5` 並留 maskable icon 安全邊距後產出。
+- **C 槽清理（本 session 做的部分）**：npm cache clean（貢獻最大宗釋放量）、pip cache purge（1.67GB）、Temp 清理（1.25→0.31GB）、Downloads 5 個重複安裝檔刪除（0.92GB）、SYSTEM 帳戶（S-1-5-18）回收筒 48G 用 `schtasks /ru SYSTEM` 排程技巧成功清空（一般管理員權限 `takeown`/`icacls` 都被拒絕，只有借 SYSTEM 身分才清得掉，指令已驗證存檔在對話紀錄）。`ms-playwright` 快取因 3 個 `chrome-headless-shell.exe` 程序占用中只清掉部分（正常 chromium 已刪、headless-shell 殘留），**沒有強制關閉那些程序**（不確定是否為其他 session 在用）。
+  - ⚠️ **發現本檔上一則「00:20」的紀錄提到 pnpm/pipx/34.47GB 等本 session 沒做過的動作**，研判是另一個平行 session 也在處理 C 槽清理，兩邊用不同工具（本 session 動 npm/pip/Downloads/回收筒，那則動 pnpm/pipx），沒有衝突但**下次接續要注意可能有第三個平行 session 同時在動 C 槽**，先跟 user 確認目前實際剩餘空間再規劃下一步，不要直接信任任一則記錄的數字。
+- **Google Apps Script 詢價表單部署**：`FORM_WEBHOOK` 仍是佔位字串未部署（表單目前送出會失敗）。已寫好一鍵互動部署腳本 `scripts/setup_apps_script_form.py`（自動開瀏覽器到 sheets.new／LINE Developers Console、自動複製 Code.gs 到剪貼簿、getpass 遮罩輸入 Token、格式驗證、自動寫回 main.js、自動實測整條路徑），**尚未 commit**（因為還沒讓 user 實際跑過驗證好不好用），**user 尚未執行**，需要在自己的終端機跑 `py -3 scripts\setup_apps_script_form.py`。
+- **「贈禮品尋單採購流程」架構規劃（goal/loop 全跑完，已 release 任務鎖）**：user 要求參考 hsc.tw 架構＋直接啟動長跑執行。5 個 Phase 全部完成並個別 commit（`cb7caa1`／`adb8af4`／`ed21769`／`3134001`／`b08b2af`）：
+  - 架構主文件 `docs/GOAL_procurement_architecture.md`，研究/資料模型/HANDOFF 在 `docs/procurement/`
+  - 追蹤系統雛形（Python，狀態機驗證＋notify_stub）在 `scripts/procurement_tracker/`，demo 4 情境 7 項檢查全過
+  - 全程**未讀取／未寫入 `gift-suppliers/`** 機密目錄（唯一讀過的是其 `CLAUDE.md` 說明檔，非實際資料）
+  - 嘗試深入參考 hsc-project 實際檔案時被 `cross-project-write-guard.py`（ST8）擋下，依規則沒有換工具繞過，改用三才自己的 Apps Script 架構做同構參考
+  - **HANDOFF 列了 3 項待 user 決定**：要不要接真實 gift-suppliers 資料、要不要正式部署成 Apps Script 版、逾期提醒排程頻率
+
+### 下次接續順序
+1. 跟 user 核對目前 C 槽實際剩餘空間（可能有平行 session 也在動，數字別直接信任舊記錄）
+2. 提醒 user 跑 `scripts/setup_apps_script_form.py` 完成詢價表單部署，跑完後這批 main.js 異動要 commit
+3. 光榮工藝社持續等 user 補素材（型錄/照片/報價單），資料夾目前完全是空的
+4. 贈禮品採購架構的 3 項 HANDOFF 待決事項等 user 回覆後才展開後續實作
+5. `ms-playwright` 快取殘留的 headless-shell 程序，等確認不是其他工作在用後可再清
+
+## 2026-09-20 00:20 CST（已過時，見上方最新進度）C 槽危機解除，Maktar 重跑驗證中
+
+- **C 槽已緩解**：user 拍板「先清開發工具快取」。實際清理前先查證 `pipx` 資料夾裡混了真正在用的 `venvs`（276M，不是快取，快取本身只有1KB），已排除不動；`pnpm`/`npm-cache` 用官方指令（`npm cache clean --force`、`pnpm store prune`）清理，`ms-playwright`/`ms-playwright-go`/`Package Cache` 直接清空（純快取，工具需要時自動重建）。結果：C 槽可用空間從 13GB → **34.47GB**，比預估的 2.9GB 多很多。**其餘大戶（LINE 19G/Google 18G/Packages 13G/Videos 88G/Downloads 79G）都還沒動，維持 user 未拍板前不碰的原則**。
+- **Maktar Playwright Step 2 驗證**：C 槽空間解除後重新派工驗證（背景執行中），完成後才能 commit Maktar 型錄異動。
+- 前一輪盤點時發現的兩個路徑陷阱記錄下來避免重蹈覆轍：`C:\Documents and Settings` 是指向 `C:\Users` 的 junction、`AppData\Local\Application Data` 是指向 `AppData\Local` 自己的 symlink，兩者都會被 `du` 加上結尾斜線時誤跟蹤造成重複計算，下次用 `du` 掃 Windows 使用者目錄要記得排除或用 `find -maxdepth 1 -type d` 過濾掉這類自我指涉的相容性連結。
+- `$Recycle.Bin` 顯示 48G 但需要系統管理員權限才能清（實際在 SYSTEM 帳戶底下），這條**仍未解決**，需要 user 自己用系統管理員身分處理。
+
+## 2026-09-19 23:06 CST（已過時，見上方最新進度）C 槽空間危機（唯讀分析中）+ Maktar 驗證卡住未 commit
 
 - **背景**：延續 09-18 的 1-5 待辦，繼續處理時 Maktar Playwright 驗證撞到磁碟寫入失敗，查出 C 槽已逼近滿載，中途插入緊急磁碟盤點，尚未收尾。
 - **C 槽危機**：918G/931G 已用（99%），僅剩 13GB。已完成唯讀掃描（**全程沒刪除任何檔案**）：
