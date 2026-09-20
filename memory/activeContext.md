@@ -2,6 +2,23 @@
 
 > 每次任務開始時更新
 
+## 2026-09-20 09:17 CST User 已回覆 HANDOFF 三項決定，待新 session 展開分析
+
+**因 session 已 679 則／約 259K tokens 觸發 session-size-guard 警告，依全域規則停下 //save，本輪分析工作留給下個 session，不在本 session 繼續疊加。**
+
+User 對 `docs/procurement/HANDOFF.md` 三項待決事項的回覆（原文）：
+1. **要不要接真實供應商資料** → 「要，但與我們目前拿到的資料確認對應」（即：要接，但要先跟 `gift-suppliers/` 現有資料做欄位/內容對應確認，不是憑空接）
+2. **要不要正式部署成 Apps Script** → 「好壞處分析」（user 要看利弊分析後再決定，不是直接說要或不要）
+3. **逾期提醒排程頻率** → 「分析好壞」（同上，要看不同頻率選項的利弊分析）
+
+### 下次接續順序（新 session 開場直接做）
+1. 針對上述三點各自產出好壞分析：
+   - 決定1：真實資料整合 — 對應 `gift-suppliers/` 現有 Excel 主檔欄位（見 `docs/procurement/02_data_model.md` 最後一節已有欄位對照草案），要做「讀取 gift-suppliers/ 內容」這一步時記得這是機密目錄，讀取本身可以做（不算對外洩漏），但**輸出/新建的任何檔案都不可以把實際供應商資料寫進 SAN-TSAIR repo 會被 git 追蹤的路徑**，只能留在 `gift-suppliers/`（已 gitignore）底下，或存在使用者本機不進版控的地方
+   - 決定2：Apps Script 部署好壞分析 — 可比較「留在本地 Python 雛形」vs「部署成 Apps Script（跟現有詢價表單共用 LINE 推播基礎設施）」兩個選項的維運成本/穩定性/擴充性
+   - 決定3：逾期提醒頻率好壞分析 — 可比較每日/每週/即時（webhook觸發）等選項的雜訊量 vs 即時性 trade-off
+2. 三項分析完成、user 拍板後才展開對應的實作動作（讀取 gift-suppliers/ 做欄位對應、或實際部署 Apps Script、或設定排程）
+3. 這三項都屬於 `docs/GOAL_procurement_architecture.md` HANDOFF 的後續，不是新的 goal/loop 任務，不需要重新取鎖跑五步驟，直接當一般任務處理即可
+
 ## 2026-09-20 01:05 CST Maktar 已 commit＋PWA icon 修復＋贈禮品採購流程架構 goal/loop 全部完成
 
 - **Maktar Step 2 驗證：全過，已 commit**（`1d4be98`）。派 Fable agent 背景重跑，用 `page.route` 攔截 `main.js` 回應動態切換 `maktar: true` 驗證（不動 working tree），index.html／temple-gifts.html 各自 64 項檢查（卡片顯示/modal/19頁+6頁翻頁/鍵盤左右鍵/25張圖片200無破圖/無console error）全過，main.js 最終確認仍是 `maktar: false`。

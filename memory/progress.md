@@ -2,6 +2,10 @@
 
 > 每次任務開始時更新
 
+## 2026-09-20（續，session-size-guard 觸發後 //save）
+- User 回覆 HANDOFF 三項決定：真實資料要接（但需對應現有 gift-suppliers 資料）、Apps Script 部署要好壞分析、提醒頻率要好壞分析
+- 三項分析待新 session 展開，詳見 activeContext.md 最新一則
+
 ## 2026-09-20
 - C 槽危機解除（SYSTEM 回收筒用 schtasks/SYSTEM 身分技巧清空、npm/pip 快取、Downloads 重複檔）
 - Maktar Step 2 Playwright 驗證 64 項全過，已 commit（1d4be98）
