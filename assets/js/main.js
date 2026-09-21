@@ -155,11 +155,15 @@ document.addEventListener('DOMContentLoaded', () => {
   // 大嘉衣業：同意狀態確認中（詳見 P:\@三才WEB\@三才WEB.xlsx），暫時下架；
   // Maktar：已同意但要先看三才網站再決定，先做好素材保持關閉；
   // 光榮工藝社：尚未取得廠商同意、無實際素材，先放類別示意圖佔位保持關閉；
-  // 取得書面同意後把對應開關改成 true 即可重新上架，不用改 HTML 結構
+  // 丹露實業：2026-09-21 緊急下架——型錄圖（Oichan/Danro/HAPADO/KUKKAR）印有實際
+  //   售價與「N只/箱」批發包裝量，違反網站嚴禁公開物件價格規則，待去識別化/改用
+  //   無價格版素材後才能重新開啟；
+  // 取得書面同意（或素材修正）後把對應開關改成 true 即可重新上架，不用改 HTML 結構
   const VENDOR_ENABLED = {
     daijia: false,
     maktar: false,
-    guangrong: false
+    guangrong: false,
+    danlu: false
   };
   document.querySelectorAll('[data-vendor-toggle]').forEach(el => {
     if (VENDOR_ENABLED[el.dataset.vendorToggle] === false) el.style.display = 'none';
