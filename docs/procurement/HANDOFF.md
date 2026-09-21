@@ -25,18 +25,21 @@
 型錄分類組織原則，設計出一套「供應商/報價/採購單」三實體 + 狀態機的架構，並用
 虛構資料寫了一支可運作的 Python 雛形驗證整個設計可行。
 
-## 待你決定的事項（這是本次 goal/loop 刻意停下、不自行決定的範圍）
+## 三項待決事項 — 已拍板並完成部署（2026-09-21）
 
-1. **要不要真的把 `gift-suppliers/` 的真實資料接進來？**
-   欄位已經對齊好了（見 `docs/procurement/02_data_model.md` 最後一節），但實際整合方式
-   （做成需要登入的私有頁面？留在 Excel + 只是加自動提醒？）需要你決定，這涉及機密
-   資料存放位置的判斷，不是 Claude 該自行拍板的範圍。
-2. **要不要正式部署成 Apps Script 版本？**
-   目前雛形是本地 Python，`README.md` 已經寫好怎麼比照 `config/google-apps-script/Code.gs`
-   改寫成真正會推播 LINE 通知的版本，需要你本人操作部署（同一套帳號授權模式）。
-3. **逾期提醒要多久跑一次？**
-   雛形的 `check_overdue()` 要手動呼叫，正式上線需要排程（Apps Script time-driven
-   trigger 或 Task Scheduler），頻率（每天一次？每小時？）由你決定。
+1. **真實資料整合**：拍板方案 A（見 `docs/procurement/03_handoff_decisions_analysis.md`）——
+   Google Sheet 只當零金額的追蹤層，`gift-suppliers/` 的 Excel 主檔永遠是唯一的商務/金額
+   資料來源。`gift-suppliers/scripts/export_tracker_seed.py` 已萃取第一梯隊 8 家的非金額
+   參照欄位，匯入完成（新增 8 筆）。
+2. **Apps Script 部署**：拍板選 B，已部署 `config/google-apps-script/ProcurementTracker.gs`
+   到獨立的新 Google Sheet 專案（不跟詢價表單那份共用），複用同一組 LINE Channel。
+   `runSelfTest()` 10/10 PASS。
+3. **逾期提醒頻率**：拍板每個工作日 09:00，`setupDailyTrigger()` 已建立排程，確認執行成功。
+
+**目前狀態**：8 家廠商都還沒正式寄出開發信（`contacted_at`/`reply_deadline` 空白），
+`quotes` 分頁 `status` 欄全空是正常現象。等 user 本人寄出開發信、在 `gift-suppliers/`
+主檔填上聯繫日與回覆期限後，重跑 `export_tracker_seed.py` 再匯入一次即可開始追蹤
+（`importSeedData()` 對已存在的 supplier_id 只更新參照欄位，不會動 status，可重複執行）。
 
 ## 參考限制說明
 
