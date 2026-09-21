@@ -2,6 +2,10 @@
 # gift-suppliers/ 內含供應商報價、私人聯絡窗口、內部盡調評估，整份目錄禁止進版控
 /gift-suppliers/
 
+# memory/ 是 Claude Code 跨 session 工作筆記（廠商同意狀態／內部決策過程／本機路徑），
+# 純內部接續用，不對外，禁止進版控（2026-09-21 發現先前誤 commit，尚未 push 前修正）
+/memory/
+
 # Excel 暫存鎖定檔
 ~$*.xlsx
 
