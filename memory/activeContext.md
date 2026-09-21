@@ -2,6 +2,31 @@
 
 > 每次任務開始時更新
 
+## 2026-09-21 12:06 CST 採購追蹤器 HANDOFF 三項決定全部落地部署完成
+
+**贈禮品尋單採購流程架構的 HANDOFF 三項待決事項已分析、拍板、實作、部署、驗證、commit 全部完成，這條任務線目前是完整收尾狀態，非新 session 待辦。**
+
+- **三項好壞分析**：Sonnet 先產出 `docs/procurement/03_handoff_decisions_analysis.md`，再請 `Agent(model="fable")` 做決策裁決（兩輪：先拍板 1-C/2-B/3-每日，再細化決定1 的欄位分工方案）。拍板結果：
+  1. 真實資料整合 → **方案 A**：Google Sheet 只當零金額追蹤層（supplier_id/name/tier/contact_channel/product_name/quote_id/status/contacted_at/reply_deadline/quoted_at/next_action/last_synced），`gift-suppliers/` 的 Excel 主檔永遠是唯一金額/商務資料來源，單向同步（先寫 Excel 再改 Sheet 狀態）
+  2. Apps Script 部署 → **選 B**：只需要 time-driven trigger，不需要部署 Web App，攻擊面比詢價表單小
+  3. 逾期提醒頻率 → **每個工作日 09:00**，彙總成單則 LINE 訊息（LINE Messaging API 免費額度每月約200則，逐則推會超額）
+- **實作產出**（已 commit `205aee6`）：
+  - `config/google-apps-script/ProcurementTracker.gs`：獨立於詢價表單的新 Apps Script 專案，`runSelfTest()` 10 項狀態機/逾期邏輯純測試、`setupDailyTrigger()`、`importSeedData()` 選單一鍵 upsert
+  - `gift-suppliers/scripts/export_tracker_seed.py`（gitignore，機密目錄內）：從 Excel 主檔精確萃取第一梯隊 8 家的非金額參照資料。**實作過程踩到一次 bug**：第一版用關鍵字比對整份工作表，誤把同一工作表下方「MVP 測試清單」區塊也算進去，17 家重複；改成先讀 MVP 清單（第29-36列）取得精確 8 家名單，再回主表（限定第5-24列）比對，修正後正確
+  - `scripts/setup_procurement_tracker.py`：一鍵部署精靈，比照既有 `setup_apps_script_form.py` 模式
+- **重大 bug 修復**：`setup_apps_script_form.py` 與新寫的 `setup_procurement_tracker.py` 的 `copy_to_clipboard()` 原本用 `clip.exe` 直接 pipe UTF-8 bytes，**在繁體中文 Windows 預設的 Big5(950) codepage 下會把中文誤解碼成亂碼，且巧合破壞多行註解語法**（user 實測貼進 Apps Script 編輯器出現 `SyntaxError: Unexpected identifier`）。已在 950 codepage 下重現問題、改用 PowerShell `Set-Clipboard` 讀 UTF-8 檔案的方式修復，三次獨立驗證（含直接 import 正式腳本模組做整合測試）逐字元比對完全一致才修好。**這是個通用坑，任何以後要寫「複製中文內容到剪貼簿」的 Python 腳本都要注意，不能直接用 `clip.exe` pipe UTF-8 bytes**。
+- **User 實際操作部署全程協助**：LINE Developers Console 開好 Channel、Script Properties 填值（新版 Apps Script UI 只有「編輯指令碼屬性」按鈕沒有獨立新增按鈕，容易卡住）、`runSelfTest` 跑出 10/10 PASS、`setupDailyTrigger` 建立成功、`tracker_seed.csv` 一開始用複製貼上失敗（逗號沒分欄），改用 Google Sheet「檔案→匯入→上傳」直接上傳 CSV 才成功，匯入 8 筆完成。
+- **User 明確確認過的邊界**：我沒有瀏覽器自動化/電腦操作工具（已用 ToolSearch 查證過，session 裡真的沒有），沒辦法代替 user 操作 Google 帳號登入狀態下的網頁畫面，這類步驟只能引導 user 自己點。
+
+### 未解決、不急的兩件事
+1. `db26c7b Revert "fix: 補齊 PWA icon 資料..."` 這筆 commit 把上一輪已完成的 PWA icon 修復（`2e53a23`）revert 掉了，時間點剛好跟上次 `//save` 同一秒，原因不明（可能是平行 session 或 user 自己操作），**尚未跟 user 確認過原因**，PWA icon 404 的問題目前又是存在的
+2. 光榮工藝社（`P:\@三才WEB\@詢問廠商意見中\光榮工藝社\`）資料夾仍完全空的，持續等 user 補素材
+
+### 下次接續順序
+1. 若 user 提起，先確認 `db26c7b` revert 的原因，決定要不要重新套用 PWA icon 修復
+2. 光榮工藝社等 user 補素材才能繼續
+3. 之後 user 正式寄出開發信、`gift-suppliers/` 主檔填了聯繫日/回覆期限後，重跑 `export_tracker_seed.py` 再匯入一次即可讓追蹤器真的開始運作（`importSeedData()` 對既有 supplier_id 只更新參照欄位不動 status，可重複執行不會壞資料）
+
 ## 2026-09-20 09:17 CST User 已回覆 HANDOFF 三項決定，待新 session 展開分析
 
 **因 session 已 679 則／約 259K tokens 觸發 session-size-guard 警告，依全域規則停下 //save，本輪分析工作留給下個 session，不在本 session 繼續疊加。**

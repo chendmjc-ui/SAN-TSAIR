@@ -2,6 +2,14 @@
 
 > 每次任務開始時更新
 
+## 2026-09-21（採購追蹤器全部落地部署完成）
+- HANDOFF 三項待決事項好壞分析 + fable 裁決（1-C/2-B/3-每日09:00）全部拍板
+- ProcurementTracker.gs、export_tracker_seed.py、setup_procurement_tracker.py 三支新程式完成並實測
+- 修復既有 setup_apps_script_form.py 與新腳本共通的 clip.exe 中文亂碼 bug（950 codepage 下三次驗證修復）
+- 協助 user 實際完成部署：LINE Channel 建立、Script Properties、runSelfTest 10/10、每日排程、8家廠商資料匯入
+- 已 commit（205aee6）
+- 發現 db26c7b 把 PWA icon 修復 revert 掉，原因待查
+
 ## 2026-09-20（續，session-size-guard 觸發後 //save）
 - User 回覆 HANDOFF 三項決定：真實資料要接（但需對應現有 gift-suppliers 資料）、Apps Script 部署要好壞分析、提醒頻率要好壞分析
 - 三項分析待新 session 展開，詳見 activeContext.md 最新一則
