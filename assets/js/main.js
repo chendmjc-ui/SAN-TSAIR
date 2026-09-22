@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
     daijia: false,
     maktar: false,
     guangrong: false,
-    danlu: false
+    danlu: true
   };
   document.querySelectorAll('[data-vendor-toggle]').forEach(el => {
     if (VENDOR_ENABLED[el.dataset.vendorToggle] === false) el.style.display = 'none';
