@@ -321,20 +321,23 @@ if (themeBtn) {
   }
 }
 
-// --- Product Filter ---
+// --- Product Filter（比對 data-category，不比對文字，避免標題改字就篩不到）---
 const filterBtns = document.querySelectorAll('.filter-btn');
 const productCards = document.querySelectorAll('.product-card');
-filterBtns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    filterBtns.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    const filter = btn.dataset.filter;
-    productCards.forEach(card => {
-      if (filter === 'all' || card.querySelector('h3').innerText.includes(filter) || card.querySelector('.product-icon').innerText.includes(filter)) {
-        card.style.display = 'block';
-      } else {
-        card.style.display = 'none';
-      }
-    });
+function applyProductFilter(category) {
+  filterBtns.forEach(b => b.classList.toggle('active', b.dataset.filter === category));
+  productCards.forEach(card => {
+    card.style.display = (category === 'all' || card.dataset.category === category) ? 'block' : 'none';
   });
+}
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => applyProductFilter(btn.dataset.filter));
 });
+
+// --- 首頁三大 icon 選單：直接篩到對應分類並捲動到商品區，客戶不用逛整頁 ---
+window.goToCategory = function(e, category) {
+  if (e) e.preventDefault();
+  applyProductFilter(category);
+  document.getElementById('products')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  return false;
+};

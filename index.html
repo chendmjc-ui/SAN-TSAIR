@@ -238,6 +238,27 @@
   </div>
 </section>
 
+<!-- ===== 三大需求 ICON 選單（讓客戶一進站就能直接選，不用逛整頁）===== -->
+<section class="intent-picker">
+  <div class="container">
+    <h2 class="intent-picker-title">您想找什麼？<span>點選直接看</span></h2>
+    <div class="intent-grid">
+      <a href="#products" class="intent-card" onclick="return goToCategory(event,'gift')">
+        <span class="intent-icon">🎁</span>
+        <span class="intent-text"><span class="intent-label">找禮品</span><span class="intent-sub">企業禮贈品・宮廟禮品</span></span>
+      </a>
+      <a href="#products" class="intent-card" onclick="return goToCategory(event,'uniform')">
+        <span class="intent-icon">👕</span>
+        <span class="intent-text"><span class="intent-label">找團體訂製服</span><span class="intent-sub">制服・班服・工作服</span></span>
+      </a>
+      <a href="#products" class="intent-card" onclick="return goToCategory(event,'award')">
+        <span class="intent-icon">🏆</span>
+        <span class="intent-text"><span class="intent-label">找獎牌</span><span class="intent-sub">匾額・獎牌・獎座</span></span>
+      </a>
+    </div>
+  </div>
+</section>
+
 <!-- ===== MARQUEE ===== -->
 <div class="marquee-bar">
   <div class="marquee-track">
@@ -297,12 +318,12 @@
     
     <div class="product-filter" style="display:flex; gap:10px; margin-bottom: 24px; justify-content:center; flex-wrap:wrap;">
       <button class="filter-btn active" data-filter="all">全部作品</button>
-      <button class="filter-btn" data-filter="匾額製作">匾額獎牌</button>
-      <button class="filter-btn" data-filter="團體制服">團體制服</button>
-      <button class="filter-btn" data-filter="宮廟宗教禮品">宮廟禮品</button>
+      <button class="filter-btn" data-filter="award">匾額獎牌</button>
+      <button class="filter-btn" data-filter="uniform">團體制服</button>
+      <button class="filter-btn" data-filter="gift">禮品類</button>
     </div>
     <div class="products-grid">
-      <div class="product-card" data-aos="fade-up" style="--delay:0s">
+      <div class="product-card" data-category="award" data-aos="fade-up" style="--delay:0s">
         <div class="product-icon">🏆</div>
         <h3>匾額製作</h3>
         <p>實木、壓克力、金屬匾額，燙金、雷雕、彩繪工藝，適合機關、宮廟、企業頒贈</p>
@@ -314,7 +335,7 @@
         </ul>
         <a href="#contact" class="card-btn">詢問報價</a>
       </div>
-      <div class="product-card featured" data-aos="fade-up" style="--delay:0.1s">
+      <div class="product-card featured" data-category="award" data-aos="fade-up" style="--delay:0.1s">
         <div class="featured-tag">熱門</div>
         <div class="product-icon">🎖️</div>
         <h3>獎牌・獎座</h3>
@@ -327,7 +348,7 @@
         </ul>
         <a href="#contact" class="card-btn">詢問報價</a>
       </div>
-      <div class="product-card" data-aos="fade-up" style="--delay:0.2s">
+      <div class="product-card" data-category="uniform" data-aos="fade-up" style="--delay:0.2s">
         <div class="product-icon">👕</div>
         <h3>團體制服</h3>
         <p>企業制服、班服、活動服、工作背心，支援小量客製至大量批發</p>
@@ -339,7 +360,7 @@
         </ul>
         <a href="#contact" class="card-btn">詢問報價</a>
       </div>
-      <div class="product-card" data-aos="fade-up" style="--delay:0.3s">
+      <div class="product-card" data-category="uniform" data-aos="fade-up" style="--delay:0.3s">
         <div class="product-icon">🧥</div>
         <h3>訂製服裝</h3>
         <p>量身訂製各式服裝，提供多元優質材料與精準剪裁技術，滿足各種版型需求</p>
@@ -351,7 +372,7 @@
         </ul>
         <a href="#contact" class="card-btn">詢問報價</a>
       </div>
-      <div class="product-card" data-aos="fade-up" style="--delay:0.4s">
+      <div class="product-card" data-category="gift" data-aos="fade-up" style="--delay:0.4s">
         <div class="product-icon">🎁</div>
         <h3>企業禮贈品</h3>
         <p>開幕禮品、尾牙贈品、股東會紀念品、節慶禮盒，量身規劃企業形象禮品</p>
@@ -363,7 +384,7 @@
         </ul>
         <a href="#contact" class="card-btn">詢問報價</a>
       </div>
-      <div class="product-card" data-aos="fade-up" style="--delay:0.5s">
+      <div class="product-card" data-category="gift" data-aos="fade-up" style="--delay:0.5s">
         <div class="product-icon">⛩️</div>
         <h3>宮廟・宗教禮品</h3>
         <p>廟宇活動客製化錦旗、神明馬甲、進香背心、建醮紀念品，在地文化深度服務</p>

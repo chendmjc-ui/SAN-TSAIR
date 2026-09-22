@@ -70,6 +70,25 @@ section{padding:96px 0}
 .hero-scroll{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--ink3);font-size:.72rem;letter-spacing:.1em}
 .scroll-arrow{width:18px;height:18px;border-right:2px solid var(--accent);border-bottom:2px solid var(--accent);transform:rotate(45deg);animation:bounce 1.5s infinite}
 @keyframes bounce{0%,100%{transform:rotate(45deg) translateY(0)}50%{transform:rotate(45deg) translateY(6px)}}
+/* 三大需求 ICON 選單（大字大按鈕，考量決策者40-50歲有老花，字體/圖示刻意放大） */
+.intent-picker{padding:56px 0 64px;background:var(--white)}
+.intent-picker-title{font-family:'Noto Serif TC',serif;font-size:clamp(1.5rem,3vw,2rem);font-weight:700;text-align:center;color:var(--ink);margin-bottom:32px}
+.intent-picker-title span{display:block;font-family:'Noto Sans TC',sans-serif;font-size:1rem;font-weight:500;color:var(--ink3);margin-top:8px}
+.intent-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.intent-card{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;text-decoration:none;background:var(--cream);border:3px solid var(--cream3);border-radius:var(--radius-lg);padding:36px 20px;min-height:200px;transition:.25s ease}
+.intent-card:hover,.intent-card:active{border-color:var(--accent);background:var(--accent-light);transform:translateY(-4px);box-shadow:var(--shadow-md)}
+.intent-icon{font-size:3.4rem;line-height:1}
+.intent-text{display:flex;flex-direction:column;gap:4px}
+.intent-label{font-size:1.55rem;font-weight:900;color:var(--ink)}
+.intent-sub{font-size:1.05rem;color:var(--ink2);font-weight:500}
+@media(max-width:768px){
+  .intent-grid{grid-template-columns:1fr;gap:16px}
+  .intent-card{flex-direction:row;justify-content:flex-start;text-align:left;min-height:96px;padding:20px 24px;gap:20px}
+  .intent-text{align-items:flex-start}
+  .intent-icon{font-size:2.8rem}
+  .intent-label{font-size:1.4rem}
+  .intent-sub{font-size:1rem}
+}
 /* MARQUEE */
 .marquee-bar{background:var(--ink);padding:13px 0;overflow:hidden;white-space:nowrap;position:relative}
 .marquee-bar::before, .marquee-bar::after {content:"";position:absolute;top:0;bottom:0;width:40px;z-index:2}
