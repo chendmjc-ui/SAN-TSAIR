@@ -341,3 +341,13 @@ window.goToCategory = function(e, category) {
   document.getElementById('products')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   return false;
 };
+
+// --- 網址帶 ?cat= 參數時，頁面一載入就自動篩選並捲動（給LINE圖文選單/外部廣告連結導流用）---
+// budget 參數目前只記錄不影響篩選（尚未有分預算的商品資料），保留給之後串接用
+(function () {
+  const params = new URLSearchParams(location.search);
+  const cat = params.get('cat');
+  if (['gift', 'uniform', 'award'].includes(cat)) {
+    window.addEventListener('load', () => goToCategory(null, cat));
+  }
+})();
