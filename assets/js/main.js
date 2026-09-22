@@ -270,6 +270,24 @@ document.addEventListener('DOMContentLoaded', () => {
     return false;
   };
 
+  // --- 「立即詢價」icon：把目前頁面資訊即時帶入 LINE OA 訊息框，小編一眼看出客戶在看哪一頁、附上該頁連結 ---
+  window.sendLineInquiry = function(e, lineId) {
+    if (e) e.preventDefault();
+    const pageLabel = document.title;
+    const msg = `您好，我正在看「${pageLabel}」\n${location.href}\n想了解更多資訊，麻煩幫我介紹`;
+    const encoded = encodeURIComponent(msg);
+    const appUrl = `line://oaMessage/${lineId}/?${encoded}`;
+    const webUrl = `https://line.me/R/oaMessage/${lineId}/?${encoded}`;
+    const leftAt = Date.now();
+    window.location.href = appUrl;
+    setTimeout(() => {
+      if (!document.hidden && Date.now() - leftAt < 2000) {
+        window.open(webUrl, '_blank');
+      }
+    }, 1200);
+    return false;
+  };
+
   document.getElementById('catalogPdfModal')?.addEventListener('click', function(e) {
     if (e.target === this) closePdfCatalog();
   });
