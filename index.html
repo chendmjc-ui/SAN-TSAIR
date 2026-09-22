@@ -784,7 +784,7 @@
 <a href="https://www.google.com/maps/search/?api=1&query=%E5%BD%B0%E5%8C%96%E7%B8%A3%E6%BA%AA%E6%B9%96%E9%8E%AE%E8%88%88%E5%AD%B8%E8%A1%97356%E5%B7%B71%E8%99%9F" target="_blank" class="accent-text" style="font-weight:700;">在 Google 地圖開啟 →</a>
 </div></div>
         <div class="info-item"><span class="info-icon">📞</span><div><strong>電話</strong><p><a href="tel:+88648824899" class="accent-text" style="font-weight:700;">04-882-4899</a></p></div></div>
-        <div class="info-item"><span class="info-icon">💬</span><div><strong>LINE 官方帳號</strong><p>請加入 ID：<a href="https://line.me/R/ti/p/@669vddce" target="_blank" class="accent-text" style="font-weight:700;">@669vddce</a></p></div></div>
+        <div class="info-item"><span class="info-icon">💬</span><div><strong>LINE 官方帳號</strong><p>請加入 ID：<a href="https://line.me/R/ti/p/@669vddce" onclick="return openLineApp(event,'@669vddce')" class="accent-text" style="font-weight:700;">@669vddce</a></p></div></div>
         <div class="info-item"><span class="info-icon">🕐</span><div><strong>服務時間</strong><p>週一～週六 09:00–18:00</p></div></div>
         <div class="contact-highlight">
           <strong>🎁 首次詢價享優惠</strong>
@@ -864,17 +864,23 @@
   </div>
 </footer>
 
-<a href="#contact" class="floating-btn" id="floatingBtn">
+<a href="tel:+88648824899" class="floating-btn" id="floatingBtn">
   <span>📞</span>
-  <span class="fb-text">免費詢價</span>
+  <span class="fb-text">直接撥打</span>
 </a>
 
 <script src="assets/js/main.js"></script>
 
 <!-- Floating LINE Button -->
-<a href="https://line.me/R/ti/p/@669vddce" target="_blank" class="line-float-btn" aria-label="加入 LINE 官方帳號">
+<a href="https://line.me/R/ti/p/@669vddce" onclick="return openLineApp(event,'@669vddce')" class="line-float-btn" aria-label="加入 LINE 官方帳號">
   <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg" alt="LINE" style="width: 32px; height: 32px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));">
 </a>
+
+<!-- 手機版底部 sticky 雙按鈕：一鍵直撥電話 / 直接開啟 LINE App，不經表單降低詢單摩擦 -->
+<div class="sticky-cta-bar">
+  <a href="tel:+88648824899" class="cta-call"><span>📞</span> 直接撥打</a>
+  <a href="https://line.me/R/ti/p/@669vddce" onclick="return openLineApp(event,'@669vddce')" class="cta-line"><span>💬</span> LINE 詢單</a>
+</div>
 
 </body>
 </html>

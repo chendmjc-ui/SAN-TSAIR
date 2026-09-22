@@ -325,3 +325,33 @@ section{padding:96px 0}
 @media(max-width:768px){
   .line-float-btn { bottom: 80px; }
 }
+
+/* 手機版底部 sticky 雙按鈕（直撥電話 / LINE App），降低詢單摩擦：不經表單、一鍵直達 */
+.sticky-cta-bar { display: none; }
+@media(max-width:768px){
+  .sticky-cta-bar{
+    display:flex;
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    z-index:1000;
+    box-shadow:0 -4px 16px rgba(0,0,0,.15);
+  }
+  .sticky-cta-bar a{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:14px 8px;
+    font-weight:700;
+    font-size:.92rem;
+    text-decoration:none;
+    color:#fff;
+  }
+  .sticky-cta-bar .cta-call{ background: var(--ink); }
+  .sticky-cta-bar .cta-line{ background: #00B900; }
+  .floating-btn, .line-float-btn { display: none; }
+  body{ padding-bottom: 56px; }
+}

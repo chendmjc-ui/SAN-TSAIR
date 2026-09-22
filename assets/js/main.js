@@ -255,6 +255,21 @@ document.addEventListener('DOMContentLoaded', () => {
     galleryPages = [];
   };
 
+  // --- LINE 直接呼叫 App（桌面/手機皆先試 line:// 協定，1.2秒沒反應才退回網頁版QR code）---
+  window.openLineApp = function(e, lineId) {
+    if (e) e.preventDefault();
+    const appUrl = `line://ti/p/${lineId}`;
+    const webUrl = `https://line.me/R/ti/p/${lineId}`;
+    const leftAt = Date.now();
+    window.location.href = appUrl;
+    setTimeout(() => {
+      if (!document.hidden && Date.now() - leftAt < 2000) {
+        window.open(webUrl, '_blank');
+      }
+    }, 1200);
+    return false;
+  };
+
   document.getElementById('catalogPdfModal')?.addEventListener('click', function(e) {
     if (e.target === this) closePdfCatalog();
   });
