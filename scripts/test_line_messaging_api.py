@@ -1,12 +1,27 @@
+import os
 import urllib.request
 import json
 
 # ==========================================
 # 三才實業 - LINE Messaging API 測試腳本
 # ==========================================
-# 請將下方的 TOKEN 與 USER_ID 替換為真實資料
-LINE_ACCESS_TOKEN = 'YOUR_CHANNEL_ACCESS_TOKEN'
-USER_ID = 'YOUR_USER_ID'
+# Token 一律從專案根目錄的 .env 讀取（該檔已列入 .gitignore），不要寫死在這支有版控的腳本裡
+def _load_env():
+    env_path = os.path.join(os.path.dirname(__file__), '..', '.env')
+    env = {}
+    if os.path.exists(env_path):
+        with open(env_path, encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith('#'):
+                    continue
+                k, _, v = line.partition('=')
+                env[k] = v
+    return env
+
+_env = _load_env()
+LINE_ACCESS_TOKEN = _env.get('LINE_CHANNEL_ACCESS_TOKEN', 'YOUR_CHANNEL_ACCESS_TOKEN')
+USER_ID = _env.get('LINE_TEST_USER_ID', 'YOUR_USER_ID')
 
 url = 'https://api.line.me/v2/bot/message/push'
 

@@ -6,6 +6,11 @@
 # 純內部接續用，不對外，禁止進版控（2026-09-21 發現先前誤 commit，尚未 push 前修正）
 /memory/
 
+# API Key / Token / 密碼等機密設定，嚴禁進版控
+.env
+.env.*
+*_secrets.env
+
 # Excel 暫存鎖定檔
 ~$*.xlsx
 
