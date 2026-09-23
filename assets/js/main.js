@@ -155,10 +155,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --- 廠商上下架開關 ---
-  // 大嘉衣業：同意狀態確認中（詳見 P:\@三才WEB\@三才WEB.xlsx），暫時下架；
+  // BIGHOME：同意狀態確認中（詳見 P:\@三才WEB\@三才WEB.xlsx），暫時下架；
   // Maktar：已同意但要先看三才網站再決定，先做好素材保持關閉；
-  // 光榮工藝社：尚未取得廠商同意、無實際素材，先放類別示意圖佔位保持關閉；
-  // 丹露實業：2026-09-21 緊急下架——型錄圖（Oichan/Danro/HAPADO/KUKKAR）印有實際
+  // 獎牌：尚未取得廠商同意、無實際素材，先放類別示意圖佔位保持關閉；
+  // DANRO：2026-09-21 緊急下架——型錄圖（Oichan/Danro/HAPADO/KUKKAR）印有實際
   //   售價與「N只/箱」批發包裝量，違反網站嚴禁公開物件價格規則，待去識別化/改用
   //   無價格版素材後才能重新開啟；
   // 取得書面同意（或素材修正）後把對應開關改成 true 即可重新上架，不用改 HTML 結構
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (VENDOR_ENABLED[el.dataset.vendorToggle] === false) el.style.display = 'none';
   });
 
-  // --- PDF Catalog Modal（單一檔案：大嘉衣業外部 PDF、丹露/創冠單張型錄圖）---
+  // --- PDF Catalog Modal（單一檔案：BIGHOME外部 PDF、DANRO/UNAVI單張型錄圖）---
   window.openPdfCatalog = function(url, title) {
     const modal = document.getElementById('catalogPdfModal');
     const frame = document.getElementById('pdfFrame');
@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 4000);
   };
 
-  // --- 多頁型錄瀏覽（富雷克/瑋瑋服飾/萬宇：PDF 拆頁壓縮成的 webp 圖片組）---
+  // --- 多頁型錄瀏覽（PADER PHALIPE/Paul Sailing/Pro Dormy：PDF 拆頁壓縮成的 webp 圖片組）---
   // basePath 底下依 scripts/extract_catalog_pdfs.py 的輸出命名規則排好 page-01.webp ~ page-NN.webp
   window.catalogPages = function(basePath, count) {
     const list = [];
@@ -341,7 +341,7 @@ filterBtns.forEach(btn => {
 // --- 篩到某分類時，在示意卡上方提示「往下有合作廠商的真實型錄」並直接錨到該系列 ---
 // #products 六張卡只是服務項目說明（CTA 都是詢價表單），真正上架的廠商商品在 #catalog；
 // LINE 圖文選單 ?cat= 導流進來的客戶若只看到示意卡，不會知道下面還有型錄。
-// id 對照 index.html 的 .catalog-category-title；award 目前沒有上架廠商（光榮工藝社關閉中）會自動不顯示
+// id 對照 index.html 的 .catalog-category-title；award 目前沒有上架廠商（獎牌關閉中）會自動不顯示
 const CATALOG_SECTIONS = {
   gift:    { id: 'catalog-gift',    label: '企業禮贈品系列' },
   uniform: { id: 'catalog-uniform', label: '服飾・制服系列' },
