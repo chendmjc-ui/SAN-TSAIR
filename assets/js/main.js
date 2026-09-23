@@ -172,8 +172,21 @@ document.addEventListener('DOMContentLoaded', () => {
     if (VENDOR_ENABLED[el.dataset.vendorToggle] === false) el.style.display = 'none';
   });
 
-  // --- PDF Catalog Modal（單一檔案：BIGHOME外部 PDF、DANRO/UNAVI單張型錄圖）---
+  // --- PDF Catalog Modal（BIGHOME外部PDF走iframe；DANRO/UNAVI本地單張型錄圖改走圖片檢視器，才能套用放大功能）---
+  function isImageUrl(url) {
+    return /\.(webp|png|jpe?g|svg)(\?.*)?$/i.test(url);
+  }
+
   window.openPdfCatalog = function(url, title) {
+    if (isImageUrl(url)) {
+      openGalleryCatalog([url], title);
+      // 單張型錄圖仍保留下載按鈕（多頁型錄才不適合提供單一下載連結）
+      const dl = document.getElementById('pdfDownloadLink');
+      dl.style.display = '';
+      dl.href = url;
+      return;
+    }
+
     const modal = document.getElementById('catalogPdfModal');
     const frame = document.getElementById('pdfFrame');
     const titleEl = document.getElementById('pdfModalTitle');
@@ -215,9 +228,57 @@ document.addEventListener('DOMContentLoaded', () => {
   let galleryPages = [];
   let galleryIndex = 0;
 
+  // --- 放大/平移狀態（滾輪/雙擊/按鈕/雙指皆共用同一組狀態）---
+  let zoomScale = 1, zoomX = 0, zoomY = 0;
+  const ZOOM_MIN = 1, ZOOM_MAX = 4, ZOOM_STEP = 0.7;
+
+  function applyZoomTransform() {
+    const img = document.getElementById('galleryImg');
+    img.style.transform = `translate(${zoomX}px, ${zoomY}px) scale(${zoomScale})`;
+    document.getElementById('galleryViewer').classList.toggle('zoomed', zoomScale > 1);
+    document.getElementById('zoomOutBtn').disabled = zoomScale <= ZOOM_MIN;
+    document.getElementById('zoomInBtn').disabled = zoomScale >= ZOOM_MAX;
+  }
+
+  function resetZoom() {
+    zoomScale = 1; zoomX = 0; zoomY = 0;
+    applyZoomTransform();
+  }
+
+  // 放大/縮小時讓縮放中心貼著游標(或雙指中點)，而不是每次都跳回圖片正中央
+  function clampPan() {
+    const viewer = document.getElementById('galleryViewer');
+    const maxX = (viewer.clientWidth * (zoomScale - 1)) / 2;
+    const maxY = (viewer.clientHeight * (zoomScale - 1)) / 2;
+    zoomX = Math.max(-maxX, Math.min(maxX, zoomX));
+    zoomY = Math.max(-maxY, Math.min(maxY, zoomY));
+  }
+
+  function setZoom(newScale, clientX, clientY) {
+    newScale = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, newScale));
+    if (newScale === zoomScale) return;
+    const viewer = document.getElementById('galleryViewer');
+    const rect = viewer.getBoundingClientRect();
+    const cx = clientX != null ? clientX : rect.left + rect.width / 2;
+    const cy = clientY != null ? clientY : rect.top + rect.height / 2;
+    const originX = cx - rect.left - rect.width / 2;
+    const originY = cy - rect.top - rect.height / 2;
+    const ratio = newScale / zoomScale;
+    zoomX = originX - (originX - zoomX) * ratio;
+    zoomY = originY - (originY - zoomY) * ratio;
+    zoomScale = newScale;
+    clampPan();
+    applyZoomTransform();
+  }
+
   function renderGalleryPage() {
     document.getElementById('galleryImg').src = galleryPages[galleryIndex];
+    resetZoom();
+    const multi = galleryPages.length > 1;
     document.getElementById('galleryCounter').textContent = (galleryIndex + 1) + ' / ' + galleryPages.length;
+    document.getElementById('galleryCounter').style.display = multi ? '' : 'none';
+    document.getElementById('galleryPrev').style.display = multi ? '' : 'none';
+    document.getElementById('galleryNext').style.display = multi ? '' : 'none';
     document.getElementById('galleryPrev').disabled = galleryIndex === 0;
     document.getElementById('galleryNext').disabled = galleryIndex === galleryPages.length - 1;
   }
@@ -247,8 +308,86 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   document.addEventListener('keydown', (e) => {
     if (!galleryPages.length || !document.getElementById('catalogPdfModal').classList.contains('open')) return;
-    if (e.key === 'ArrowLeft') document.getElementById('galleryPrev').click();
-    if (e.key === 'ArrowRight') document.getElementById('galleryNext').click();
+    if (e.key === 'ArrowLeft' && zoomScale <= 1) document.getElementById('galleryPrev').click();
+    if (e.key === 'ArrowRight' && zoomScale <= 1) document.getElementById('galleryNext').click();
+    if (e.key === '+' || e.key === '=') setZoom(zoomScale + ZOOM_STEP);
+    if (e.key === '-') setZoom(zoomScale - ZOOM_STEP);
+    if (e.key === 'Escape' && zoomScale > 1) resetZoom();
+  });
+
+  // --- 放大按鈕（決策者多為中高齡受眾，明確按鈕比手勢更易被發現）---
+  document.getElementById('zoomInBtn')?.addEventListener('click', () => setZoom(zoomScale + ZOOM_STEP));
+  document.getElementById('zoomOutBtn')?.addEventListener('click', () => setZoom(zoomScale - ZOOM_STEP));
+  document.getElementById('zoomResetBtn')?.addEventListener('click', resetZoom);
+
+  // --- 滑鼠滾輪縮放（以游標位置為中心）---
+  document.getElementById('galleryViewer')?.addEventListener('wheel', (e) => {
+    if (!galleryPages.length) return;
+    e.preventDefault();
+    setZoom(zoomScale + (e.deltaY < 0 ? ZOOM_STEP : -ZOOM_STEP), e.clientX, e.clientY);
+  }, { passive: false });
+
+  // --- 雙擊切換放大 ---
+  document.getElementById('galleryImg')?.addEventListener('dblclick', (e) => {
+    if (zoomScale > 1) resetZoom();
+    else setZoom(2.5, e.clientX, e.clientY);
+  });
+
+  // --- 滑鼠拖曳平移（放大後才生效）---
+  let dragging = false, dragStartX = 0, dragStartY = 0, dragOrigX = 0, dragOrigY = 0;
+  document.getElementById('galleryImg')?.addEventListener('mousedown', (e) => {
+    if (zoomScale <= 1) return;
+    dragging = true;
+    dragStartX = e.clientX; dragStartY = e.clientY;
+    dragOrigX = zoomX; dragOrigY = zoomY;
+    e.preventDefault();
+  });
+  window.addEventListener('mousemove', (e) => {
+    if (!dragging) return;
+    zoomX = dragOrigX + (e.clientX - dragStartX);
+    zoomY = dragOrigY + (e.clientY - dragStartY);
+    clampPan();
+    applyZoomTransform();
+  });
+  window.addEventListener('mouseup', () => { dragging = false; });
+
+  // --- 觸控：雙指縮放 + 放大後單指拖曳平移 ---
+  let touchStartDist = 0, touchStartScale = 1, touchPanning = false;
+  let touchStartX = 0, touchStartY = 0, touchOrigX = 0, touchOrigY = 0;
+  function touchDist(touches) {
+    return Math.hypot(touches[0].clientX - touches[1].clientX, touches[0].clientY - touches[1].clientY);
+  }
+  const galleryViewerEl = document.getElementById('galleryViewer');
+  galleryViewerEl?.addEventListener('touchstart', (e) => {
+    if (!galleryPages.length) return;
+    if (e.touches.length === 2) {
+      touchStartDist = touchDist(e.touches);
+      touchStartScale = zoomScale;
+      touchPanning = false;
+    } else if (e.touches.length === 1 && zoomScale > 1) {
+      touchPanning = true;
+      touchStartX = e.touches[0].clientX; touchStartY = e.touches[0].clientY;
+      touchOrigX = zoomX; touchOrigY = zoomY;
+    }
+  }, { passive: true });
+  galleryViewerEl?.addEventListener('touchmove', (e) => {
+    if (e.touches.length === 2 && touchStartDist > 0) {
+      e.preventDefault();
+      const dist = touchDist(e.touches);
+      const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+      const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+      setZoom(touchStartScale * (dist / touchStartDist), midX, midY);
+    } else if (touchPanning && e.touches.length === 1) {
+      e.preventDefault();
+      zoomX = touchOrigX + (e.touches[0].clientX - touchStartX);
+      zoomY = touchOrigY + (e.touches[0].clientY - touchStartY);
+      clampPan();
+      applyZoomTransform();
+    }
+  }, { passive: false });
+  galleryViewerEl?.addEventListener('touchend', (e) => {
+    if (e.touches.length < 2) touchStartDist = 0;
+    if (e.touches.length === 0) touchPanning = false;
   });
 
   window.closePdfCatalog = function() {
@@ -256,6 +395,7 @@ document.addEventListener('DOMContentLoaded', () => {
     modal.classList.remove('open');
     document.getElementById('pdfFrame').src = '';
     galleryPages = [];
+    resetZoom();
   };
 
   // --- LINE 直接呼叫 App（桌面/手機皆先試 line:// 協定，1.2秒沒反應才退回網頁版QR code）---

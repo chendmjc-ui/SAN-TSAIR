@@ -656,9 +656,14 @@
       <iframe id="pdfFrame" src="" frameborder="0"></iframe>
       <div class="gallery-viewer" id="galleryViewer" style="display:none">
         <button type="button" class="gallery-nav prev" id="galleryPrev" aria-label="上一頁">‹</button>
-        <img id="galleryImg" src="" alt="型錄頁面">
+        <img id="galleryImg" src="" alt="型錄頁面" title="雙擊、滾輪或用下方按鈕放大細看">
         <button type="button" class="gallery-nav next" id="galleryNext" aria-label="下一頁">›</button>
         <div class="gallery-counter" id="galleryCounter"></div>
+        <div class="gallery-zoom-controls">
+          <button type="button" id="zoomOutBtn" aria-label="縮小">−</button>
+          <button type="button" id="zoomResetBtn" aria-label="重置縮放">1:1</button>
+          <button type="button" id="zoomInBtn" aria-label="放大">＋</button>
+        </div>
       </div>
       <div class="pdf-fallback" id="pdfFallback" style="display:none">
         <p>📄 若 PDF 無法直接顯示，請點擊下方按鈕開啟：</p>
