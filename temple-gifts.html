@@ -811,6 +811,40 @@
           <label for="qty">預計數量</label>
           <input type="text" id="qty" placeholder="例：50件、100個">
         </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="unitPrice">單價區間（每件/每份）</label>
+            <select id="unitPrice">
+              <option value="">請選擇單價區間</option>
+              <option>500元以下</option>
+              <option>500-2000元</option>
+              <option>2000-5000元</option>
+              <option>5000元以上</option>
+              <option>未定，請報價建議</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="totalBudget">總預算</label>
+            <select id="totalBudget">
+              <option value="">請選擇總預算</option>
+              <option>1萬元以下</option>
+              <option>1-5萬元</option>
+              <option>5-20萬元</option>
+              <option>20萬元以上</option>
+              <option>未定，請報價建議</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="deadline">交期期限</label>
+          <select id="deadline">
+            <option value="">請選擇期望交期</option>
+            <option>1週內（急件）</option>
+            <option>2-3週內</option>
+            <option>1個月內</option>
+            <option>可配合，不急</option>
+          </select>
+        </div>
         <div class="form-group">
           <label for="msg">需求說明</label>
           <textarea id="msg" rows="4" placeholder="請描述您的需求，例如：用途、特殊要求、期望交期等"></textarea>

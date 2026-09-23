@@ -100,6 +100,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const phone = document.getElementById('phone').value.trim();
       const service = document.getElementById('service').value;
       const qty = document.getElementById('qty').value.trim();
+      const unitPrice = document.getElementById('unitPrice')?.value || '';
+      const totalBudget = document.getElementById('totalBudget')?.value || '';
+      const deadline = document.getElementById('deadline')?.value || '';
       const msg = document.getElementById('msg').value.trim();
 
       if (!name || !phone) {
@@ -118,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const res = await fetch(FORM_WEBHOOK, {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({ name, phone, service, qty, msg, time: new Date().toISOString() })
+          body: JSON.stringify({ name, phone, service, qty, unitPrice, totalBudget, deadline, msg, time: new Date().toISOString() })
         });
         sent = res.ok;
       } catch (err) {
@@ -127,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // 本機備用記錄（無論是否送達都保留，方便排查）
       const records = JSON.parse(localStorage.getItem('santsair_inquiries') || '[]');
-      records.push({ name, phone, service, qty, msg, time: new Date().toISOString(), sent });
+      records.push({ name, phone, service, qty, unitPrice, totalBudget, deadline, msg, time: new Date().toISOString(), sent });
       localStorage.setItem('santsair_inquiries', JSON.stringify(records));
 
       if (sent) {
@@ -368,13 +371,47 @@ window.goToCategory = function(e, category) {
 };
 
 // --- 網址帶 ?cat= 參數時，頁面一載入就自動篩選並捲動（給LINE圖文選單/外部廣告連結導流用）---
-// budget 參數目前只記錄不影響篩選（尚未有分預算的商品資料），保留給之後串接用
+// item/unitPrice/qty/deadline 對應 LINE Rich Menu 規劃中的細項/單價/數量/交期深連結，
+// 有帶這些參數代表客戶在 LINE 端已經選完，直接預填表單並捲到聯絡表單，不用再逛一次型錄
+const CATEGORY_ITEM_TO_SERVICE = {
+  'gift:corporate': '企業禮贈品',
+  'gift:temple': '宮廟宗教禮品',
+  'uniform:group': '團體制服',
+  'uniform:custom': '訂製服裝',
+  'award:plaque': '匾額製作',
+  'award:trophy': '獎牌・獎座'
+};
 (function () {
   // temple-gifts.html 也載這支檔但沒有篩選按鈕、卡片沒有 data-category，跑下去會把卡片全藏掉，直接略過
   if (!filterBtns.length) return;
   const params = new URLSearchParams(location.search);
   const cat = params.get('cat');
-  if (['gift', 'uniform', 'award'].includes(cat)) {
-    window.addEventListener('load', () => goToCategory(null, cat));
-  }
+  if (!['gift', 'uniform', 'award'].includes(cat)) return;
+
+  const item = params.get('item');
+  const serviceValue = CATEGORY_ITEM_TO_SERVICE[`${cat}:${item}`];
+  const unitPrice = params.get('unitPrice');
+  const totalBudget = params.get('totalBudget');
+  const qty = params.get('qty');
+  const deadline = params.get('deadline');
+  const hasDeepLinkDetail = serviceValue || unitPrice || totalBudget || qty || deadline;
+
+  window.addEventListener('load', () => {
+    goToCategory(null, cat);
+    if (!hasDeepLinkDetail) return;
+
+    const setIfPresent = (id, value) => {
+      const el = document.getElementById(id);
+      if (el && value) el.value = value;
+    };
+    setIfPresent('service', serviceValue);
+    setIfPresent('unitPrice', unitPrice);
+    setIfPresent('totalBudget', totalBudget);
+    setIfPresent('qty', qty);
+    setIfPresent('deadline', deadline);
+
+    setTimeout(() => {
+      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 500);
+  });
 })();

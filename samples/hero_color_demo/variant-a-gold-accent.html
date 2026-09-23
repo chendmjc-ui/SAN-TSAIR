@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>配色demo A - 局部金色點綴（維持米白底）</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/style.min.css">
+  <style>
+    /* ============================
+       配色demo A：維持現有米白底，只把 --accent 系列從暖橘（#B45309）
+       換成 141913.tw 的金色（#d4a853），其餘結構/背景完全不動。
+       ============================ */
+    :root {
+      --accent: #A8791E;        /* 文字/icon用，比原始#d4a853加深以維持米白底上的對比度 */
+      --accent2: #D4A853;       /* 141913.tw 原始金色，用於漸層/裝飾點 */
+      --accent-light: #FBF3DF;  /* 金色調的淺底色，取代原本的琥珀淺底 */
+      --accent-border: #E8C878;
+    }
+    .demo-tag{position:fixed;top:10px;left:10px;z-index:9999;background:#1C1917;color:#FBF3DF;font:700 13px/1.4 sans-serif;padding:6px 14px;border-radius:100px;letter-spacing:.05em}
+  </style>
+</head>
+<body>
+<div class="demo-tag">Demo A・局部金色點綴（米白底不變）</div>
+
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <span class="logo-zh">三才實業</span>
+      <span class="logo-sub">SAN-TSAIR GIFT</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">關於我們</a></li>
+      <li><a href="#products">產品服務</a></li>
+      <li><a href="#clients">服務對象</a></li>
+      <li><a href="#area">服務區域</a></li>
+      <li><a href="#catalog">品牌型錄</a></li>
+      <li><a href="#" class="nav-cta">💬 立即詢價</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="開啟選單">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-particles" id="particles"></div>
+  <div class="hero-content">
+    <div class="hero-badge">彰化溪湖 ・ 三才實業 ・ 在地30年信賴品牌</div>
+    <h1 class="hero-title">
+      找禮品 × 找制服 × 找獎牌<br>
+      <span class="accent-text">三種需求，幫您快速包辦到底</span>
+    </h1>
+    <p class="hero-desc">匾額・獎牌・錦旗・團體制服・訂製服裝<br>30年工藝堅持，從彰化出發，服務全台</p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-primary">免費詢價</a>
+      <a href="#products" class="btn-outline">查看服務</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">30+</span><span class="stat-label">年品牌歷史</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><span class="stat-num">5000+</span><span class="stat-label">服務客戶</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><span class="stat-num">100%</span><span class="stat-label">客製化設計</span></div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>向下滾動</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<section class="intent-picker">
+  <div class="container">
+    <h2 class="intent-picker-title">您想找什麼？<span>點選直接看</span></h2>
+    <div class="intent-grid">
+      <a href="#products" class="intent-card">
+        <span class="intent-icon">🎁</span>
+        <span class="intent-text"><span class="intent-label">找禮品</span><span class="intent-sub">企業禮贈品・宮廟禮品</span></span>
+      </a>
+      <a href="#products" class="intent-card">
+        <span class="intent-icon">👕</span>
+        <span class="intent-text"><span class="intent-label">找團體訂製服</span><span class="intent-sub">制服・班服・工作服</span></span>
+      </a>
+      <a href="#products" class="intent-card">
+        <span class="intent-icon">🏆</span>
+        <span class="intent-text"><span class="intent-label">找獎牌</span><span class="intent-sub">匾額・獎牌・獎座</span></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="marquee-bar">
+  <div class="marquee-track">
+    <span>🏆 匾額訂製</span><span>🎖️ 獎牌批發</span><span>👕 團體制服</span>
+    <span>🎗️ 錦旗製作</span><span>🧥 訂製服裝</span><span>🏅 獎座雕刻</span>
+    <span>🎁 企業禮品</span><span>🎓 畢業紀念</span><span>⛩️ 宮廟背心</span>
+  </div>
+</div>
+
+</body>
+</html>
