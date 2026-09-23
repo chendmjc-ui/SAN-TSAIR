@@ -321,6 +321,12 @@ section{padding:96px 0}
 .theme-toggle { background: transparent; border: none; font-size: 1.4rem; cursor: pointer; padding: 5px; margin-right: 10px; }
 .filter-btn { padding: 8px 16px; border: var(--border); border-radius: 20px; background: var(--white); color: var(--ink); cursor: pointer; transition: 0.3s; }
 .filter-btn.active, .filter-btn:hover { background: var(--ink); color: var(--cream); }
+/* 篩到分類時的「往下看真實型錄」提示（main.js updateCatalogHint 控制顯示） */
+.catalog-hint{text-align:center;font-size:.92rem;color:var(--ink3);margin:-8px 0 24px}
+.catalog-hint[hidden]{display:none}
+.catalog-hint a{color:var(--accent);font-weight:700;text-decoration:underline}
+/* 型錄系列標題當錨點用（#catalog-gift 等），留出固定 navbar 高度免得標題被蓋住 */
+.catalog-category-title{scroll-margin-top:88px}
 
 .line-float-btn {
   position: fixed;

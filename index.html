@@ -322,6 +322,8 @@
       <button class="filter-btn" data-filter="uniform">團體制服</button>
       <button class="filter-btn" data-filter="gift">禮品類</button>
     </div>
+    <!-- 篩到某分類時由 main.js updateCatalogHint 填入對應系列並顯示；該系列沒有上架廠商就維持隱藏 -->
+    <p class="catalog-hint" id="catalogHint" hidden>想看合作廠商的實際商品？<a href="#catalog">往下瀏覽「<span class="catalog-hint-label">品牌型錄</span>」→</a></p>
     <div class="products-grid">
       <div class="product-card" data-category="award" data-aos="fade-up" style="--delay:0s">
         <div class="product-icon">🏆</div>
@@ -425,7 +427,7 @@
     <h2 class="section-title">品牌型錄<span class="accent-text">線上瀏覽</span></h2>
     <p class="section-sub">合作廠商型錄線上直接查看，內容依廠商同意情形持續更新</p>
 
-    <h3 class="catalog-category-title">服飾・制服系列</h3>
+    <h3 class="catalog-category-title" id="catalog-uniform">服飾・制服系列</h3>
     <div class="catalog-suppliers">
 
       <!-- 大嘉衣業：同意狀態確認中，暫時下架（見 main.js VENDOR_ENABLED） -->
@@ -555,7 +557,7 @@
       </div>
     </div>
 
-    <h3 class="catalog-category-title">企業禮贈品系列</h3>
+    <h3 class="catalog-category-title" id="catalog-gift">企業禮贈品系列</h3>
     <div class="catalog-suppliers">
 
       <!-- 丹露實業：原型錄圖含批發售價與箱入數已違規下架，圖片已用 rapidocr 自動偵測+人工逐格複查去識別化

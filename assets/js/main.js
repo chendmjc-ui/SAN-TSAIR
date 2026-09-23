@@ -329,10 +329,35 @@ function applyProductFilter(category) {
   productCards.forEach(card => {
     card.style.display = (category === 'all' || card.dataset.category === category) ? 'block' : 'none';
   });
+  updateCatalogHint(category);
 }
 filterBtns.forEach(btn => {
   btn.addEventListener('click', () => applyProductFilter(btn.dataset.filter));
 });
+
+// --- 篩到某分類時，在示意卡上方提示「往下有合作廠商的真實型錄」並直接錨到該系列 ---
+// #products 六張卡只是服務項目說明（CTA 都是詢價表單），真正上架的廠商商品在 #catalog；
+// LINE 圖文選單 ?cat= 導流進來的客戶若只看到示意卡，不會知道下面還有型錄。
+// id 對照 index.html 的 .catalog-category-title；award 目前沒有上架廠商（光榮工藝社關閉中）會自動不顯示
+const CATALOG_SECTIONS = {
+  gift:    { id: 'catalog-gift',    label: '企業禮贈品系列' },
+  uniform: { id: 'catalog-uniform', label: '服飾・制服系列' },
+  award:   { id: 'catalog-award',   label: '匾額・獎牌系列' }
+};
+function updateCatalogHint(category) {
+  const hint = document.getElementById('catalogHint');
+  if (!hint) return;
+  const target = CATALOG_SECTIONS[category];
+  const title = target ? document.getElementById(target.id) : null;
+  const group = title ? title.nextElementSibling : null;
+  // 該系列底下至少要有一個沒被 VENDOR_ENABLED 關掉的廠商區塊，否則提示連過去是空的
+  const hasVisible = !!group && Array.from(group.querySelectorAll('.supplier-block'))
+    .some(block => block.style.display !== 'none');
+  if (!hasVisible) { hint.hidden = true; return; }
+  hint.querySelector('a').href = '#' + target.id;
+  hint.querySelector('.catalog-hint-label').textContent = target.label;
+  hint.hidden = false;
+}
 
 // --- 首頁三大 icon 選單：直接篩到對應分類並捲動到商品區，客戶不用逛整頁 ---
 window.goToCategory = function(e, category) {
@@ -345,6 +370,8 @@ window.goToCategory = function(e, category) {
 // --- 網址帶 ?cat= 參數時，頁面一載入就自動篩選並捲動（給LINE圖文選單/外部廣告連結導流用）---
 // budget 參數目前只記錄不影響篩選（尚未有分預算的商品資料），保留給之後串接用
 (function () {
+  // temple-gifts.html 也載這支檔但沒有篩選按鈕、卡片沒有 data-category，跑下去會把卡片全藏掉，直接略過
+  if (!filterBtns.length) return;
   const params = new URLSearchParams(location.search);
   const cat = params.get('cat');
   if (['gift', 'uniform', 'award'].includes(cat)) {
