@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>Rich Menu Layer1 - B 三色分類辨識版</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700;900&family=Noto+Sans+TC:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:2500px; height:843px; overflow:hidden; }
+  body { display:flex; font-family:'Noto Sans TC',sans-serif; }
+  .tile {
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+  }
+  .tile.gift { background:linear-gradient(160deg,#C2680F,#9B4708); }
+  .tile.uniform { background:linear-gradient(160deg,#2A4A73,#1B3355); }
+  .tile.award { background:linear-gradient(160deg,#C79A3E,#9C7420); }
+  .icon { font-size:210px; line-height:1; margin-bottom:24px; filter:drop-shadow(0 6px 14px rgba(0,0,0,.25)); }
+  .label {
+    font-family:'Noto Serif TC',serif;
+    font-weight:900;
+    font-size:94px;
+    color:#FFFFFF;
+    letter-spacing:.03em;
+    text-shadow:0 3px 10px rgba(0,0,0,.2);
+  }
+  .sub {
+    margin-top:14px;
+    font-size:36px;
+    font-weight:500;
+    color:rgba(255,255,255,.85);
+    letter-spacing:.04em;
+  }
+  .badge {
+    position:absolute; top:44px;
+    background:rgba(255,255,255,.18);
+    border:2px solid rgba(255,255,255,.5);
+    border-radius:100px;
+    padding:14px 36px;
+    font-size:32px;
+    font-weight:700;
+    color:#fff;
+  }
+</style>
+</head>
+<body>
+  <div class="tile gift">
+    <div class="badge">禮品類</div>
+    <div class="icon">🎁</div>
+    <div class="label">找禮品</div>
+    <div class="sub">企業禮贈品・宮廟禮品</div>
+  </div>
+  <div class="tile uniform">
+    <div class="badge">服裝類</div>
+    <div class="icon">👕</div>
+    <div class="label">找制服</div>
+    <div class="sub">團體服・班服・工作服</div>
+  </div>
+  <div class="tile award">
+    <div class="badge">榮譽類</div>
+    <div class="icon">🏆</div>
+    <div class="label">找獎牌</div>
+    <div class="sub">匾額・獎牌・獎座</div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>Rich Menu Layer1 - A 米白品牌延續版</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700;900&family=Noto+Sans+TC:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:2500px; height:843px; overflow:hidden; }
+  body {
+    display:flex;
+    background:#FAF8F5;
+    font-family:'Noto Sans TC',sans-serif;
+  }
+  .tile {
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    border-right:2px solid rgba(28,25,23,.12);
+  }
+  .tile:last-child { border-right:none; }
+  .icon { font-size:220px; line-height:1; margin-bottom:28px; filter:drop-shadow(0 6px 16px rgba(28,25,23,.15)); }
+  .label {
+    font-family:'Noto Serif TC',serif;
+    font-weight:900;
+    font-size:96px;
+    color:#1C1917;
+    letter-spacing:.02em;
+  }
+  .sub {
+    margin-top:14px;
+    font-size:38px;
+    font-weight:500;
+    color:#78716C;
+    letter-spacing:.05em;
+  }
+  .arrow {
+    position:absolute;
+    bottom:56px;
+    font-size:46px;
+    color:#B45309;
+    font-weight:700;
+  }
+  .topband {
+    position:absolute; top:0; left:0; right:0; height:10px;
+    background:linear-gradient(90deg,#B45309,#D97706);
+  }
+</style>
+</head>
+<body>
+  <div class="topband"></div>
+  <div class="tile">
+    <div class="icon">🎁</div>
+    <div class="label">找禮品</div>
+    <div class="sub">企業禮贈品・宮廟禮品</div>
+    <div class="arrow">▾ 點我看更多</div>
+  </div>
+  <div class="tile">
+    <div class="icon">👕</div>
+    <div class="label">找制服</div>
+    <div class="sub">團體服・班服・工作服</div>
+    <div class="arrow">▾ 點我看更多</div>
+  </div>
+  <div class="tile">
+    <div class="icon">🏆</div>
+    <div class="label">找獎牌</div>
+    <div class="sub">匾額・獎牌・獎座</div>
+    <div class="arrow">▾ 點我看更多</div>
+  </div>
+</body>
+</html>

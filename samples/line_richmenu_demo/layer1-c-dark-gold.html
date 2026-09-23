@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>Rich Menu Layer1 - C 深色質感版</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700;900&family=Noto+Sans+TC:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:2500px; height:843px; overflow:hidden; }
+  body {
+    display:flex;
+    background:#0a0a12;
+    font-family:'Noto Sans TC',sans-serif;
+  }
+  .tile {
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    border-right:2px solid rgba(212,168,83,.35);
+  }
+  .tile:last-child { border-right:none; }
+  .icon {
+    font-size:210px; line-height:1; margin-bottom:26px;
+    filter:drop-shadow(0 0 30px rgba(212,168,83,.35));
+  }
+  .label {
+    font-family:'Noto Serif TC',serif;
+    font-weight:900;
+    font-size:94px;
+    color:#D4A853;
+    letter-spacing:.04em;
+  }
+  .sub {
+    margin-top:16px;
+    font-size:36px;
+    font-weight:500;
+    color:rgba(250,248,245,.65);
+    letter-spacing:.05em;
+  }
+  .line {
+    margin-top:26px;
+    width:90px; height:3px;
+    background:linear-gradient(90deg,transparent,#D4A853,transparent);
+  }
+</style>
+</head>
+<body>
+  <div class="tile">
+    <div class="icon">🎁</div>
+    <div class="label">找禮品</div>
+    <div class="line"></div>
+    <div class="sub">企業禮贈品・宮廟禮品</div>
+  </div>
+  <div class="tile">
+    <div class="icon">👕</div>
+    <div class="label">找制服</div>
+    <div class="line"></div>
+    <div class="sub">團體服・班服・工作服</div>
+  </div>
+  <div class="tile">
+    <div class="icon">🏆</div>
+    <div class="label">找獎牌</div>
+    <div class="line"></div>
+    <div class="sub">匾額・獎牌・獎座</div>
+  </div>
+</body>
+</html>

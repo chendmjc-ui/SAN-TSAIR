@@ -1,0 +1,99 @@
+{
+  "name": "SAN-TSAIR LINE RichMenu 日夜自動切換",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 6 * * *"
+            }
+          ]
+        }
+      },
+      "name": "Day Trigger 06:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [250, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.line.me/v2/bot/user/all/richmenu/richmenu-ea9d8d6387b32bbabb91ade1a503517b",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": false
+      },
+      "name": "Set Day RichMenu",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [480, 200],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "YOUR_LINE_MESSAGING_API_TOKEN_ID",
+          "name": "Line Messaging API Auth"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 18 * * *"
+            }
+          ]
+        }
+      },
+      "name": "Night Trigger 18:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [250, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.line.me/v2/bot/user/all/richmenu/richmenu-49685ee8373940693363504c8fd2a019",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": false
+      },
+      "name": "Set Night RichMenu",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [480, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "YOUR_LINE_MESSAGING_API_TOKEN_ID",
+          "name": "Line Messaging API Auth"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Day Trigger 06:00": {
+      "main": [
+        [
+          {
+            "node": "Set Day RichMenu",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Night Trigger 18:00": {
+      "main": [
+        [
+          {
+            "node": "Set Night RichMenu",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
