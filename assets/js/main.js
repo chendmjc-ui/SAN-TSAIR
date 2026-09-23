@@ -434,6 +434,9 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('catalogPdfModal')?.addEventListener('click', function(e) {
     if (e.target === this) closePdfCatalog();
   });
+  document.getElementById('intentDetailModal')?.addEventListener('click', function(e) {
+    if (e.target === this) closeIntentDetail();
+  });
 
   // --- Active nav highlight on scroll ---
   const sections = document.querySelectorAll('section[id]');
@@ -508,6 +511,80 @@ window.goToCategory = function(e, category) {
   applyProductFilter(category);
   document.getElementById('products')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   return false;
+};
+
+// --- 三大icon點擊後的第二層：先收細項/單價/預算/交期，再選「先看型錄」或「直接詢價」---
+// item 選項的 label 直接從 CATEGORY_ITEM_TO_SERVICE 反推，避免同一批文字在兩處維護
+let intentDetailCategory = null;
+let intentDetailItem = null;
+const INTENT_TITLES = { gift: '找禮品', uniform: '找團體訂製服', award: '找獎牌' };
+
+window.openIntentDetail = function(e, category) {
+  if (e) e.preventDefault();
+  intentDetailCategory = category;
+  intentDetailItem = null;
+
+  document.getElementById('intentDetailTitle').textContent = INTENT_TITLES[category] || '您想找什麼？';
+
+  const itemsWrap = document.getElementById('intentItemOptions');
+  itemsWrap.innerHTML = '';
+  Object.entries(CATEGORY_ITEM_TO_SERVICE)
+    .filter(([key]) => key.startsWith(category + ':'))
+    .forEach(([key, label]) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'intent-item-btn';
+      btn.textContent = label;
+      btn.addEventListener('click', () => {
+        intentDetailItem = key.split(':')[1];
+        itemsWrap.querySelectorAll('.intent-item-btn').forEach(b => b.classList.toggle('active', b === btn));
+      });
+      itemsWrap.appendChild(btn);
+    });
+
+  ['intentUnitPrice', 'intentTotalBudget', 'intentQty', 'intentDeadline'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+
+  document.getElementById('intentDetailModal').classList.add('open');
+  return false;
+};
+
+window.closeIntentDetail = function() {
+  document.getElementById('intentDetailModal').classList.remove('open');
+};
+
+// 「先看型錄」：只篩選分類、捲到商品區，客戶可能還在比較階段，不預填聯絡表單
+window.intentDetailGoCatalog = function() {
+  const category = intentDetailCategory;
+  closeIntentDetail();
+  if (category) goToCategory(null, category);
+};
+
+// 「直接詢價」：把細項/單價/預算/數量/交期直接帶進聯絡表單並捲過去
+window.intentDetailGoContact = function() {
+  const category = intentDetailCategory;
+  const item = intentDetailItem;
+  const unitPrice = document.getElementById('intentUnitPrice')?.value || '';
+  const totalBudget = document.getElementById('intentTotalBudget')?.value || '';
+  const qty = document.getElementById('intentQty')?.value || '';
+  const deadline = document.getElementById('intentDeadline')?.value || '';
+  closeIntentDetail();
+
+  const setIfPresent = (id, value) => {
+    const el = document.getElementById(id);
+    if (el && value) el.value = value;
+  };
+  setIfPresent('service', CATEGORY_ITEM_TO_SERVICE[`${category}:${item}`]);
+  setIfPresent('unitPrice', unitPrice);
+  setIfPresent('totalBudget', totalBudget);
+  setIfPresent('qty', qty);
+  setIfPresent('deadline', deadline);
+
+  setTimeout(() => {
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 200);
 };
 
 // --- 網址帶 ?cat= 參數時，頁面一載入就自動篩選並捲動（給LINE圖文選單/外部廣告連結導流用）---

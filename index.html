@@ -243,15 +243,15 @@
   <div class="container">
     <h2 class="intent-picker-title">您想找什麼？<span>點選直接看</span></h2>
     <div class="intent-grid">
-      <a href="#products" class="intent-card" onclick="return goToCategory(event,'gift')">
+      <a href="#products" class="intent-card" onclick="return openIntentDetail(event,'gift')">
         <span class="intent-icon">🎁</span>
         <span class="intent-text"><span class="intent-label">找禮品</span><span class="intent-sub">企業禮贈品・宮廟禮品</span></span>
       </a>
-      <a href="#products" class="intent-card" onclick="return goToCategory(event,'uniform')">
+      <a href="#products" class="intent-card" onclick="return openIntentDetail(event,'uniform')">
         <span class="intent-icon">👕</span>
         <span class="intent-text"><span class="intent-label">找團體訂製服</span><span class="intent-sub">制服・班服・工作服</span></span>
       </a>
-      <a href="#products" class="intent-card" onclick="return goToCategory(event,'award')">
+      <a href="#products" class="intent-card" onclick="return openIntentDetail(event,'award')">
         <span class="intent-icon">🏆</span>
         <span class="intent-text"><span class="intent-label">找獎牌</span><span class="intent-sub">匾額・獎牌・獎座</span></span>
       </a>
@@ -704,6 +704,66 @@
     <div class="pdf-modal-footer">
       <a id="pdfDownloadLink" href="" target="_blank" class="btn-outline">⬇ 下載型錄</a>
       <a href="#contact" onclick="closePdfCatalog()" class="btn-primary">詢問批貨報價</a>
+    </div>
+  </div>
+</div>
+
+<!-- ===== INTENT DETAIL MODAL：點三大icon後先收細項/單價/預算/交期，再選要看型錄還是直接詢價 ===== -->
+<div class="intent-detail-modal" id="intentDetailModal">
+  <div class="intent-detail-inner">
+    <div class="pdf-modal-header">
+      <span id="intentDetailTitle">您想找什麼？</span>
+      <button onclick="closeIntentDetail()" class="close-btn">✕</button>
+    </div>
+    <div class="intent-detail-body">
+      <div class="form-group">
+        <label>細項（可略過，直接往下選）</label>
+        <div class="intent-item-options" id="intentItemOptions"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="intentUnitPrice">單價區間（每件/每份）</label>
+          <select id="intentUnitPrice">
+            <option value="">請選擇單價區間</option>
+            <option>500元以下</option>
+            <option>500-2000元</option>
+            <option>2000-5000元</option>
+            <option>5000元以上</option>
+            <option>未定，請報價建議</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="intentTotalBudget">總預算</label>
+          <select id="intentTotalBudget">
+            <option value="">請選擇總預算</option>
+            <option>1萬元以下</option>
+            <option>1-5萬元</option>
+            <option>5-20萬元</option>
+            <option>20萬元以上</option>
+            <option>未定，請報價建議</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="intentQty">預計數量</label>
+          <input type="text" id="intentQty" placeholder="例：50件、100個">
+        </div>
+        <div class="form-group">
+          <label for="intentDeadline">交期期限</label>
+          <select id="intentDeadline">
+            <option value="">請選擇期望交期</option>
+            <option>1週內（急件）</option>
+            <option>2-3週內</option>
+            <option>1個月內</option>
+            <option>可配合，不急</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="intent-detail-footer">
+      <button type="button" class="btn-outline" onclick="intentDetailGoCatalog()">先看型錄</button>
+      <button type="button" class="btn-primary" onclick="intentDetailGoContact()">直接詢價</button>
     </div>
   </div>
 </div>

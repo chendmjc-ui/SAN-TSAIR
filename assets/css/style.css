@@ -227,6 +227,15 @@ section{padding:52px 0}
 /* PDF MODAL */
 .catalog-pdf-modal{position:fixed;inset:0;background:rgba(28,25,23,.75);z-index:2000;display:none;align-items:center;justify-content:center;padding:8px;backdrop-filter:blur(8px)}
 .catalog-pdf-modal.open{display:flex}
+.intent-detail-modal{position:fixed;inset:0;background:rgba(28,25,23,.75);z-index:2000;display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(8px)}
+.intent-detail-modal.open{display:flex}
+.intent-detail-inner{background:var(--white);border:var(--border);border-radius:var(--radius-lg);width:100%;max-width:480px;max-height:92vh;overflow-y:auto;box-shadow:0 24px 80px rgba(28,25,23,.2)}
+.intent-detail-body{padding:22px}
+.intent-item-options{display:flex;flex-wrap:wrap;gap:10px}
+.intent-item-btn{padding:12px 18px;border:1.5px solid rgba(28,25,23,.15);border-radius:100px;background:var(--cream);color:var(--ink2);font-size:.92rem;font-weight:600;cursor:pointer;transition:.2s ease}
+.intent-item-btn:hover{border-color:var(--accent)}
+.intent-item-btn.active{background:var(--ink);border-color:var(--ink);color:var(--cream)}
+.intent-detail-footer{padding:14px 22px;border-top:var(--border);display:flex;gap:10px;justify-content:flex-end;background:var(--cream)}
 .pdf-modal-inner{background:var(--white);border:var(--border);border-radius:var(--radius-lg);width:95vw;max-width:95vw;height:95vh;max-height:95vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 80px rgba(28,25,23,.2)}
 .pdf-modal-header{display:flex;align-items:center;justify-content:space-between;padding:14px 22px;border-bottom:var(--border);background:var(--cream)}
 #pdfModalTitle{font-weight:700;color:var(--ink);font-size:.95rem}
@@ -287,6 +296,7 @@ section{padding:52px 0}
   .floating-btn span:first-child{font-size:1.3rem}
   .brand-cards{grid-template-columns:repeat(2, 1fr)}
   .pdf-modal-footer{flex-direction:column}
+  .intent-detail-footer{flex-direction:column}
 }
 @media(max-width:480px){
   .hero-title{font-size:2rem}
