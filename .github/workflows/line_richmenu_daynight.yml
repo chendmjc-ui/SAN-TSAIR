@@ -1,0 +1,55 @@
+name: LINE RichMenu 日夜自動切換
+
+on:
+  schedule:
+    # cron 用 UTC 時間；台灣時間 06:00 = UTC 22:00(前一天)
+    - cron: '0 22 * * *'
+    # 台灣時間 18:00 = UTC 10:00
+    - cron: '0 10 * * *'
+  workflow_dispatch:
+    inputs:
+      target:
+        description: '手動指定要切換的版本(day 或 night)，留空則依觸發時間自動判斷'
+        required: false
+        type: choice
+        options:
+          - ''
+          - day
+          - night
+
+env:
+  DAY_RICH_MENU_ID: richmenu-ea9d8d6387b32bbabb91ade1a503517b
+  NIGHT_RICH_MENU_ID: richmenu-49685ee8373940693363504c8fd2a019
+
+jobs:
+  switch-richmenu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 決定要切換成日版還是夜版
+        id: decide
+        run: |
+          if [ -n "${{ github.event.inputs.target }}" ]; then
+            echo "target=${{ github.event.inputs.target }}" >> "$GITHUB_OUTPUT"
+          elif [ "${{ github.event.schedule }}" = "0 22 * * *" ]; then
+            echo "target=day" >> "$GITHUB_OUTPUT"
+          else
+            echo "target=night" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: 呼叫 LINE API 設定預設 rich menu
+        run: |
+          if [ "${{ steps.decide.outputs.target }}" = "day" ]; then
+            RICH_MENU_ID="${{ env.DAY_RICH_MENU_ID }}"
+          else
+            RICH_MENU_ID="${{ env.NIGHT_RICH_MENU_ID }}"
+          fi
+          echo "切換為：${{ steps.decide.outputs.target }} ($RICH_MENU_ID)"
+          http_code=$(curl -s -o /tmp/resp.json -w "%{http_code}" -X POST \
+            "https://api.line.me/v2/bot/user/all/richmenu/$RICH_MENU_ID" \
+            -H "Authorization: Bearer ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}")
+          cat /tmp/resp.json
+          if [ "$http_code" != "200" ]; then
+            echo "LINE API 回傳 $http_code，失敗"
+            exit 1
+          fi
+          echo "切換成功"
