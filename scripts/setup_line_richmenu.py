@@ -35,18 +35,21 @@ def _load_env():
 
 def _areas():
     # 2500x843，三等分欄位（834+833+833=2500），對應找禮品/找制服/找獎牌
+    # 2026-09-24 改為 type=message：點下去等同客戶自己在LINE打了這句話，
+    # 直接觸發 line-ai-webhook 的 AI 回覆邏輯，全程留在LINE對話框內，
+    # 不再跳出瀏覽器（原本 type=uri 跳官網造成的摩擦力，見 activeContext.md）
     return [
         {
             'bounds': {'x': 0, 'y': 0, 'width': 834, 'height': 843},
-            'action': {'type': 'uri', 'label': '找禮品', 'uri': WEBSITE_BASE + '?cat=gift'}
+            'action': {'type': 'message', 'label': '找禮品', 'text': '我想了解企業禮贈品有哪些選擇'}
         },
         {
             'bounds': {'x': 834, 'y': 0, 'width': 833, 'height': 843},
-            'action': {'type': 'uri', 'label': '找制服', 'uri': WEBSITE_BASE + '?cat=uniform'}
+            'action': {'type': 'message', 'label': '找制服', 'text': '我想了解團體制服訂製'}
         },
         {
             'bounds': {'x': 1667, 'y': 0, 'width': 833, 'height': 843},
-            'action': {'type': 'uri', 'label': '找獎牌', 'uri': WEBSITE_BASE + '?cat=award'}
+            'action': {'type': 'message', 'label': '找獎牌', 'text': '我想了解匾額獎牌製作'}
         },
     ]
 

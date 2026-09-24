@@ -18,8 +18,10 @@ on:
           - night
 
 env:
-  DAY_RICH_MENU_ID: richmenu-ea9d8d6387b32bbabb91ade1a503517b
-  NIGHT_RICH_MENU_ID: richmenu-49685ee8373940693363504c8fd2a019
+  # 2026-09-24：action 從 uri 改成 message（避免點rich menu跳出瀏覽器的摩擦力），
+  # 重新建立過 rich menu 物件，ID 跟著換新，舊ID已停用刪除
+  DAY_RICH_MENU_ID: richmenu-1af32e7b3395ca7105dfc57caa15ba5d
+  NIGHT_RICH_MENU_ID: richmenu-d6e2bc7d2b8575c3bd22e6f983a02096
 
 jobs:
   switch-richmenu:
